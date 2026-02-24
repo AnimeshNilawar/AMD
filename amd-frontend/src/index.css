@@ -1,0 +1,254 @@
+@import "tailwindcss";
+
+/* ========================================
+   WanderAI Design System
+   ======================================== */
+
+@theme {
+  --color-cream: #FAF7F2;
+  --color-sand: #F0EAE0;
+  --color-warm: #FFFCF8;
+  --color-forest: #1A3A2A;
+  --color-forest-mid: #2D5A3D;
+  --color-forest-light: #3D7A52;
+  --color-terra: #C4622D;
+  --color-gold: #C9913A;
+  --color-gold-light: #F0C97A;
+  --color-muted: #7A7060;
+  --color-text-primary: #1C1A17;
+  --color-text-secondary: #4A4640;
+  --color-border: #E0D8CC;
+  --color-crowd-low: #2D7A4A;
+  --color-crowd-low-bg: #E8F5EC;
+  --color-crowd-med: #A06010;
+  --color-crowd-med-bg: #FEF3E2;
+  --color-crowd-high: #B0302A;
+  --color-crowd-high-bg: #FDECEC;
+
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* ========================================
+   Base Styles
+   ======================================== */
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-cream);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ========================================
+   Scrollbar Styles
+   ======================================== */
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+.custom-scrollbar-thin::-webkit-scrollbar {
+  width: 3px;
+}
+
+.custom-scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+}
+
+/* ========================================
+   Category Gradient Backgrounds
+   ======================================== */
+
+.gradient-beach {
+  background: linear-gradient(160deg, #0c4a6e, #0891b2, #67e8f9);
+}
+
+.gradient-forest {
+  background: linear-gradient(160deg, #14532d, #16a34a, #86efac);
+}
+
+.gradient-temple {
+  background: linear-gradient(160deg, #451a03, #b45309, #fbbf24);
+}
+
+.gradient-mtn {
+  background: linear-gradient(160deg, #1e3a5f, #334155, #94a3b8);
+}
+
+.gradient-water {
+  background: linear-gradient(160deg, #134e4a, #0d9488, #5eead4);
+}
+
+.gradient-cave {
+  background: linear-gradient(160deg, #1e1b4b, #4338ca, #a5b4fc);
+}
+
+/* ========================================
+   Animations
+   ======================================== */
+
+@keyframes messageIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes typingDots {
+
+  0%,
+  20% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  80%,
+  100% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes toastIn {
+  from {
+    transform: translateX(-50%) translateY(80px);
+  }
+
+  to {
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes toastOut {
+  from {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  to {
+    transform: translateX(-50%) translateY(80px);
+  }
+}
+
+@keyframes fillBar {
+  from {
+    width: 0%;
+  }
+}
+
+.animate-message-in {
+  animation: messageIn 0.25s ease;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.4s ease;
+}
+
+.animate-fill-bar {
+  animation: fillBar 0.6s ease;
+}
+
+/* Typing indicator dots */
+.typing-dot {
+  animation: typingDots 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* ========================================
+   Card hover effects
+   ======================================== */
+
+.card-hover {
+  transition: all 0.22s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 20px rgba(26, 22, 16, 0.12);
+  border-color: var(--color-forest-light);
+}
+
+.card-hover-sm {
+  transition: all 0.22s ease;
+}
+
+.card-hover-sm:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 20px rgba(26, 22, 16, 0.12);
+}
+
+.cat-hover {
+  transition: all 0.22s ease;
+}
+
+.cat-hover:hover {
+  border-color: var(--color-forest);
+  background: var(--color-crowd-low-bg);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(26, 22, 16, 0.08);
+}
+
+/* ========================================
+   Crowd bar chart
+   ======================================== */
+
+.crowd-bar {
+  border-radius: 4px 4px 0 0;
+  transition: height 0.4s ease;
+}
+
+.crowd-bar.best-window {
+  opacity: 1 !important;
+  box-shadow: 0 0 0 2px var(--color-forest);
+}
+
+/* ========================================
+   Toast
+   ======================================== */
+
+.toast-enter {
+  animation: toastIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.toast-exit {
+  animation: toastOut 0.35s ease forwards;
+}

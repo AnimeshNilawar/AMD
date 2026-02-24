@@ -1,0 +1,1163 @@
+{
+    "places": [
+        {
+            "id": "rajmachi",
+            "name": "Rajmachi Trek",
+            "emoji": "🥾",
+            "bg": "forest",
+            "category": "Trekking",
+            "tags": [
+                "Trekking",
+                "Nature",
+                "Beginner-Friendly"
+            ],
+            "crowd_level": "low",
+            "experience_score": 91,
+            "distance_km": 60,
+            "drive_time": "1.5h",
+            "price_label": "₹500",
+            "ai_description": "Rajmachi is one of the most rewarding weekend treks near Pune — a hidden gem that rewards early risers with sweeping views of the Sahyadri range. Two ancient forts, Shrivardhan and Manaranjan, crown the summit. The forest trail is alive with birdsong and occasional waterfalls, making every step feel earned.",
+            "scores": {
+                "popularity": 78,
+                "weather_bonus": 92,
+                "crowd_penalty": 12,
+                "user_affinity": 85
+            },
+            "crowd_timeline": {
+                "hours": [
+                    {
+                        "time": "6A",
+                        "value": 10,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "7A",
+                        "value": 8,
+                        "is_best_window": true
+                    },
+                    {
+                        "time": "8A",
+                        "value": 12,
+                        "is_best_window": true
+                    },
+                    {
+                        "time": "9A",
+                        "value": 25,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "10A",
+                        "value": 40,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "11A",
+                        "value": 55,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "12P",
+                        "value": 60,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "1P",
+                        "value": 45,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "2P",
+                        "value": 35,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "3P",
+                        "value": 28,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "4P",
+                        "value": 20,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "5P",
+                        "value": 15,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "6P",
+                        "value": 12,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "7P",
+                        "value": 10,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "8P",
+                        "value": 8,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "9P",
+                        "value": 6,
+                        "is_best_window": false
+                    }
+                ],
+                "best_window": "7 AM – 9 AM"
+            },
+            "nearby": [
+                {
+                    "type": "food",
+                    "emoji": "🍽️",
+                    "name": "Rajmachi Homestay",
+                    "distance_label": "0.2 km"
+                },
+                {
+                    "type": "food",
+                    "emoji": "🍵",
+                    "name": "Village Tea Stall",
+                    "distance_label": "0.5 km"
+                },
+                {
+                    "type": "hotel",
+                    "emoji": "🏡",
+                    "name": "Aayush Homestay",
+                    "distance_label": "1 km"
+                },
+                {
+                    "type": "hotel",
+                    "emoji": "⛺",
+                    "name": "Forest Camp",
+                    "distance_label": "2 km"
+                }
+            ],
+            "teams": [
+                {
+                    "teamId": "t1",
+                    "name": "Pune Wanderers",
+                    "memberCount": 5,
+                    "date": "Sat 5:30 AM",
+                    "spotsLeft": 2
+                },
+                {
+                    "teamId": "t2",
+                    "name": "Solo Trekkers Club",
+                    "memberCount": 3,
+                    "date": "Flexible timing",
+                    "spotsLeft": 3
+                }
+            ],
+            "similar": [
+                {
+                    "id": "harishchandragad",
+                    "name": "Harishchandragad",
+                    "emoji": "🌄",
+                    "category": "mtn",
+                    "crowd_level": "low"
+                },
+                {
+                    "id": "visapur",
+                    "name": "Visapur Fort",
+                    "emoji": "🏰",
+                    "category": "forest",
+                    "crowd_level": "low"
+                },
+                {
+                    "id": "bhimashankar",
+                    "name": "Bhimashankar",
+                    "emoji": "🌳",
+                    "category": "forest",
+                    "crowd_level": "low"
+                }
+            ],
+            "itinerary": "🗓️ <b>Rajmachi Day Plan</b><br><br><b>6:30 AM</b> — Depart Pune (avoid traffic)<br><b>8:00 AM</b> — Arrive trailhead. Crowd: 🟢 Low (index 12)<br><b>8:15 AM</b> — Start trek (~3h, moderate difficulty)<br><b>11:30 AM</b> — Summit! Pack lunch here 🎒<br><b>1:00 PM</b> — Descend. Crowd rises to 🟡 45<br><b>2:30 PM</b> — Village homestay lunch (₹150)<br><b>4:30 PM</b> — Head back. Arrive Pune 6:30 PM<br><br><i>Why 8 AM? Crowd drops from 55 to 12 — you'll have the summit almost to yourself.</i>"
+        },
+        {
+            "id": "sinhagad",
+            "name": "Sinhagad Fort",
+            "emoji": "⛰️",
+            "bg": "mtn",
+            "category": "Mountains",
+            "tags": [
+                "Fort",
+                "History",
+                "Trek"
+            ],
+            "crowd_level": "med",
+            "experience_score": 78,
+            "distance_km": 30,
+            "drive_time": "45 min",
+            "price_label": "Free",
+            "ai_description": "Sinhagad — Lion's Fort — is where Maratha history breathes. This ancient fort at 1,312m played a pivotal role in the 1670 Battle of Sinhagad. The early morning hike is rewarded with hot buttermilk at the summit stalls and sweeping views of Pune below. Sunrise here, when mist rolls through the valley, is unlike anywhere else.",
+            "scores": {
+                "popularity": 88,
+                "weather_bonus": 75,
+                "crowd_penalty": 55,
+                "user_affinity": 72
+            },
+            "crowd_timeline": {
+                "hours": [
+                    {
+                        "time": "6A",
+                        "value": 15,
+                        "is_best_window": true
+                    },
+                    {
+                        "time": "7A",
+                        "value": 20,
+                        "is_best_window": true
+                    },
+                    {
+                        "time": "8A",
+                        "value": 35,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "9A",
+                        "value": 55,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "10A",
+                        "value": 70,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "11A",
+                        "value": 80,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "12P",
+                        "value": 85,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "1P",
+                        "value": 80,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "2P",
+                        "value": 72,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "3P",
+                        "value": 65,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "4P",
+                        "value": 58,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "5P",
+                        "value": 50,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "6P",
+                        "value": 45,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "7P",
+                        "value": 35,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "8P",
+                        "value": 25,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "9P",
+                        "value": 15,
+                        "is_best_window": false
+                    }
+                ],
+                "best_window": "6 AM – 8 AM"
+            },
+            "nearby": [
+                {
+                    "type": "food",
+                    "emoji": "🍽️",
+                    "name": "Summit Bhakri Stall",
+                    "distance_label": "On-site"
+                },
+                {
+                    "type": "food",
+                    "emoji": "🥛",
+                    "name": "Taak-Kanda (Buttermilk)",
+                    "distance_label": "On-site"
+                },
+                {
+                    "type": "hotel",
+                    "emoji": "🏨",
+                    "name": "Sinhagad Resort",
+                    "distance_label": "3 km"
+                },
+                {
+                    "type": "hotel",
+                    "emoji": "🏡",
+                    "name": "Khadakwasla Homestay",
+                    "distance_label": "5 km"
+                }
+            ],
+            "teams": [
+                {
+                    "teamId": "t3",
+                    "name": "Fort Seekers",
+                    "memberCount": 6,
+                    "date": "Sat 5 AM",
+                    "spotsLeft": 1
+                }
+            ],
+            "similar": [
+                {
+                    "id": "rajgad",
+                    "name": "Rajgad Fort",
+                    "emoji": "🏰",
+                    "category": "mtn",
+                    "crowd_level": "low"
+                },
+                {
+                    "id": "torna",
+                    "name": "Torna Fort",
+                    "emoji": "⛰️",
+                    "category": "mtn",
+                    "crowd_level": "low"
+                },
+                {
+                    "id": "lohagad",
+                    "name": "Lohagad Fort",
+                    "emoji": "🏔️",
+                    "category": "mtn",
+                    "crowd_level": "med"
+                }
+            ],
+            "itinerary": "🗓️ <b>Sinhagad Day Plan</b><br><br><b>5:30 AM</b> — Depart Pune<br><b>6:15 AM</b> — Arrive. Crowd: 🟢 Low (best window)<br><b>6:30 AM</b> — Begin trek up (1h)<br><b>7:30 AM</b> — Summit. Famous buttermilk + pohe breakfast 🥛<br><b>9:00 AM</b> — Explore fort ruins & viewpoints<br><b>10:30 AM</b> — Descend before crowd peaks at 11 AM<br><b>12:00 PM</b> — Back in Pune for lunch<br><br><i>Avoid visiting after 9 AM — crowd index hits 80+ on weekends.</i>"
+        },
+        {
+            "id": "tamhini",
+            "name": "Tamhini Falls",
+            "emoji": "💧",
+            "bg": "water",
+            "category": "Waterfalls",
+            "tags": [
+                "Waterfall",
+                "Nature",
+                "Photography"
+            ],
+            "crowd_level": "low",
+            "experience_score": 84,
+            "distance_km": 55,
+            "drive_time": "1.2h",
+            "price_label": "Free",
+            "ai_description": "Tamhini is not just a waterfall — it's an entire ecosystem experience. Nestled in Tamhini Ghat, the area is draped in dense forest that hums with life. The waterfall cascades in multiple tiers, each offering a different photography angle. The drive through the ghat — winding roads through mist-covered hills — is half the experience.",
+            "scores": {
+                "popularity": 75,
+                "weather_bonus": 88,
+                "crowd_penalty": 30,
+                "user_affinity": 78
+            },
+            "crowd_timeline": {
+                "hours": [
+                    {
+                        "time": "6A",
+                        "value": 5,
+                        "is_best_window": true
+                    },
+                    {
+                        "time": "7A",
+                        "value": 8,
+                        "is_best_window": true
+                    },
+                    {
+                        "time": "8A",
+                        "value": 15,
+                        "is_best_window": true
+                    },
+                    {
+                        "time": "9A",
+                        "value": 30,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "10A",
+                        "value": 50,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "11A",
+                        "value": 65,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "12P",
+                        "value": 70,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "1P",
+                        "value": 65,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "2P",
+                        "value": 55,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "3P",
+                        "value": 45,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "4P",
+                        "value": 35,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "5P",
+                        "value": 28,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "6P",
+                        "value": 20,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "7P",
+                        "value": 15,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "8P",
+                        "value": 10,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "9P",
+                        "value": 8,
+                        "is_best_window": false
+                    }
+                ],
+                "best_window": "6 AM – 9 AM"
+            },
+            "nearby": [
+                {
+                    "type": "food",
+                    "emoji": "🍽️",
+                    "name": "Ghat Dhaba",
+                    "distance_label": "1 km"
+                },
+                {
+                    "type": "food",
+                    "emoji": "☕",
+                    "name": "Valley View Café",
+                    "distance_label": "2 km"
+                },
+                {
+                    "type": "hotel",
+                    "emoji": "🏡",
+                    "name": "Forest Stay",
+                    "distance_label": "3 km"
+                },
+                {
+                    "type": "hotel",
+                    "emoji": "🏨",
+                    "name": "Nature's Nest",
+                    "distance_label": "5 km"
+                }
+            ],
+            "teams": [
+                {
+                    "teamId": "t4",
+                    "name": "Nature Clicks",
+                    "memberCount": 2,
+                    "date": "Early morning shoot",
+                    "spotsLeft": 2
+                }
+            ],
+            "similar": [
+                {
+                    "id": "devkund",
+                    "name": "Devkund Falls",
+                    "emoji": "🌊",
+                    "category": "water",
+                    "crowd_level": "low"
+                },
+                {
+                    "id": "kune",
+                    "name": "Kune Falls",
+                    "emoji": "💦",
+                    "category": "water",
+                    "crowd_level": "low"
+                },
+                {
+                    "id": "lingamala",
+                    "name": "Lingamala Falls",
+                    "emoji": "💧",
+                    "category": "water",
+                    "crowd_level": "low"
+                }
+            ],
+            "itinerary": "🗓️ <b>Tamhini Falls Day Plan</b><br><br><b>6:00 AM</b> — Depart Pune via Paud Road<br><b>7:15 AM</b> — Arrive. Crowd: 🟢 Very Low (index 8)<br><b>7:30 AM</b> — Explore main falls & photography<br><b>9:00 AM</b> — Trek to upper tier falls<br><b>10:30 AM</b> — Breakfast at Ghat Dhaba<br><b>12:00 PM</b> — Scenic drive back through ghat<br><b>1:30 PM</b> — Back in Pune<br><br><i>Visit before 9 AM — after 10 AM, crowd index jumps from 15 to 65.</i>"
+        },
+        {
+            "id": "alibaug",
+            "name": "Alibaug Beach",
+            "emoji": "🏖️",
+            "bg": "beach",
+            "category": "Beaches",
+            "tags": [
+                "Beach",
+                "Coastal",
+                "Weekend Getaway"
+            ],
+            "crowd_level": "low",
+            "experience_score": 87,
+            "distance_km": 96,
+            "drive_time": "2h",
+            "price_label": "₹1,200",
+            "ai_description": "Alibaug is the quintessential Konkan escape — warm golden sand, the historic Kolaba Fort rising from the sea, and a gentle pace of life a world away from Pune. Best visited in winter when the sea is calm. Fresh seafood at beachside shacks makes every visit memorable.",
+            "scores": {
+                "popularity": 85,
+                "weather_bonus": 90,
+                "crowd_penalty": 28,
+                "user_affinity": 80
+            },
+            "crowd_timeline": {
+                "hours": [
+                    {
+                        "time": "6A",
+                        "value": 5,
+                        "is_best_window": true
+                    },
+                    {
+                        "time": "7A",
+                        "value": 5,
+                        "is_best_window": true
+                    },
+                    {
+                        "time": "8A",
+                        "value": 8,
+                        "is_best_window": true
+                    },
+                    {
+                        "time": "9A",
+                        "value": 20,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "10A",
+                        "value": 45,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "11A",
+                        "value": 65,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "12P",
+                        "value": 75,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "1P",
+                        "value": 70,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "2P",
+                        "value": 60,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "3P",
+                        "value": 50,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "4P",
+                        "value": 45,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "5P",
+                        "value": 55,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "6P",
+                        "value": 65,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "7P",
+                        "value": 70,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "8P",
+                        "value": 60,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "9P",
+                        "value": 40,
+                        "is_best_window": false
+                    }
+                ],
+                "best_window": "6 AM – 9 AM"
+            },
+            "nearby": [
+                {
+                    "type": "food",
+                    "emoji": "🍤",
+                    "name": "Kokan Darbar Seafood",
+                    "distance_label": "0.3 km"
+                },
+                {
+                    "type": "hotel",
+                    "emoji": "🏨",
+                    "name": "SunSand Resort",
+                    "distance_label": "0.5 km"
+                },
+                {
+                    "type": "food",
+                    "emoji": "🍹",
+                    "name": "Beach Shack Bar",
+                    "distance_label": "0.2 km"
+                },
+                {
+                    "type": "hotel",
+                    "emoji": "🏨",
+                    "name": "Alibaug Palace Hotel",
+                    "distance_label": "2 km"
+                }
+            ],
+            "teams": [
+                {
+                    "teamId": "t5",
+                    "name": "Beach Lovers Pune",
+                    "memberCount": 4,
+                    "date": "Leaving Fri night",
+                    "spotsLeft": 3
+                }
+            ],
+            "similar": [
+                {
+                    "id": "kashid",
+                    "name": "Kashid Beach",
+                    "emoji": "🌊",
+                    "category": "beach",
+                    "crowd_level": "low"
+                },
+                {
+                    "id": "murud",
+                    "name": "Murud Beach",
+                    "emoji": "🏖️",
+                    "category": "beach",
+                    "crowd_level": "low"
+                },
+                {
+                    "id": "diveagar",
+                    "name": "Diveagar",
+                    "emoji": "🐚",
+                    "category": "beach",
+                    "crowd_level": "low"
+                }
+            ],
+            "itinerary": "🗓️ <b>Alibaug Weekend Plan</b><br><br><b>Fri 9 PM</b> — Depart Pune (avoid Sat morning traffic)<br><b>Fri 11 PM</b> — Check in. Early sleep 🌙<br><b>Sat 6:30 AM</b> — Morning beach walk. Crowd: 🟢 Very Low<br><b>8:00 AM</b> — Breakfast at beach shack<br><b>10:00 AM</b> — Kolaba Fort visit (boat ride, ₹50)<br><b>1:00 PM</b> — Seafood lunch at Kokan Darbar<br><b>3:00 PM</b> — Beach time. Crowd peaks 🟡 70 — okay to enjoy<br><b>Sun 10:00 AM</b> — Depart before traffic builds<br><br><i>Total: ~₹2,800/person for 2 days including stay, food, transport.</i>"
+        },
+        {
+            "id": "karla",
+            "name": "Karla Caves",
+            "emoji": "🕌",
+            "bg": "cave",
+            "category": "Temples",
+            "tags": [
+                "Heritage",
+                "Caves",
+                "Photography"
+            ],
+            "crowd_level": "low",
+            "experience_score": 82,
+            "distance_km": 60,
+            "drive_time": "1.5h",
+            "price_label": "₹150",
+            "ai_description": "Karla Caves are among India's finest ancient rock-cut Buddhist shrines, dating to the 2nd century BCE. The grand Chaitya hall with its towering ribbed ceiling creates profound stillness. The site receives far less footfall than it deserves — perfect for heritage without the hustle.",
+            "scores": {
+                "popularity": 65,
+                "weather_bonus": 80,
+                "crowd_penalty": 15,
+                "user_affinity": 88
+            },
+            "crowd_timeline": {
+                "hours": [
+                    {
+                        "time": "6A",
+                        "value": 5,
+                        "is_best_window": true
+                    },
+                    {
+                        "time": "7A",
+                        "value": 8,
+                        "is_best_window": true
+                    },
+                    {
+                        "time": "8A",
+                        "value": 12,
+                        "is_best_window": true
+                    },
+                    {
+                        "time": "9A",
+                        "value": 20,
+                        "is_best_window": true
+                    },
+                    {
+                        "time": "10A",
+                        "value": 30,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "11A",
+                        "value": 40,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "12P",
+                        "value": 45,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "1P",
+                        "value": 40,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "2P",
+                        "value": 35,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "3P",
+                        "value": 28,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "4P",
+                        "value": 22,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "5P",
+                        "value": 18,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "6P",
+                        "value": 14,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "7P",
+                        "value": 10,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "8P",
+                        "value": 8,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "9P",
+                        "value": 6,
+                        "is_best_window": false
+                    }
+                ],
+                "best_window": "8 AM – 11 AM"
+            },
+            "nearby": [
+                {
+                    "type": "food",
+                    "emoji": "🍽️",
+                    "name": "Karla Village Dhaba",
+                    "distance_label": "0.5 km"
+                },
+                {
+                    "type": "hotel",
+                    "emoji": "🏨",
+                    "name": "Lonavala Hotels",
+                    "distance_label": "12 km"
+                },
+                {
+                    "type": "food",
+                    "emoji": "☕",
+                    "name": "Tiger Point Café",
+                    "distance_label": "8 km"
+                },
+                {
+                    "type": "hotel",
+                    "emoji": "🛒",
+                    "name": "Chikki Shops",
+                    "distance_label": "10 km"
+                }
+            ],
+            "teams": [
+                {
+                    "teamId": "t6",
+                    "name": "Heritage Explorers",
+                    "memberCount": 3,
+                    "date": "Sunday 8 AM",
+                    "spotsLeft": 4
+                }
+            ],
+            "similar": [
+                {
+                    "id": "bhaja",
+                    "name": "Bhaja Caves",
+                    "emoji": "🏛️",
+                    "category": "cave",
+                    "crowd_level": "low"
+                },
+                {
+                    "id": "bedse",
+                    "name": "Bedse Caves",
+                    "emoji": "🗿",
+                    "category": "cave",
+                    "crowd_level": "low"
+                },
+                {
+                    "id": "elephanta",
+                    "name": "Elephanta Caves",
+                    "emoji": "🕌",
+                    "category": "cave",
+                    "crowd_level": "med"
+                }
+            ],
+            "itinerary": "🗓️ <b>Karla Caves Day Plan</b><br><br><b>7:30 AM</b> — Depart Pune via Expressway<br><b>9:00 AM</b> — Arrive Karla. Crowd: 🟢 Very Low (index 12)<br><b>9:15 AM</b> — Explore main Chaitya hall (1.5h)<br><b>10:45 AM</b> — Ekvira Devi Temple visit<br><b>12:00 PM</b> — Lunch at Village Dhaba<br><b>1:30 PM</b> — Drive to Bhaja Caves (12 km, similar caves, even fewer visitors)<br><b>3:30 PM</b> — Head back to Pune<br><br><i>Combine with Bhaja Caves for a full heritage day. Total cost: ₹400–₹500.</i>"
+        },
+        {
+            "id": "siddhivinayak",
+            "name": "Siddhivinayak Temple",
+            "emoji": "🛕",
+            "bg": "temple",
+            "category": "Temples",
+            "tags": [
+                "Temple",
+                "Spiritual",
+                "Heritage"
+            ],
+            "crowd_level": "high",
+            "experience_score": 62,
+            "distance_km": 150,
+            "drive_time": "3h",
+            "price_label": "₹200",
+            "ai_description": "Siddhivinayak is one of Maharashtra's most revered Ganesh temples — a spiritual landmark drawing devotees for centuries. The golden dome gleams under the Mumbai sky. For a peaceful visit, avoid weekends. Tuesday mornings see the highest footfall. Plan accordingly.",
+            "scores": {
+                "popularity": 95,
+                "weather_bonus": 60,
+                "crowd_penalty": 79,
+                "user_affinity": 65
+            },
+            "crowd_timeline": {
+                "hours": [
+                    {
+                        "time": "6A",
+                        "value": 20,
+                        "is_best_window": true
+                    },
+                    {
+                        "time": "7A",
+                        "value": 40,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "8A",
+                        "value": 65,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "9A",
+                        "value": 85,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "10A",
+                        "value": 90,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "11A",
+                        "value": 92,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "12P",
+                        "value": 88,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "1P",
+                        "value": 85,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "2P",
+                        "value": 80,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "3P",
+                        "value": 78,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "4P",
+                        "value": 75,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "5P",
+                        "value": 72,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "6P",
+                        "value": 70,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "7P",
+                        "value": 75,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "8P",
+                        "value": 80,
+                        "is_best_window": false
+                    },
+                    {
+                        "time": "9P",
+                        "value": 70,
+                        "is_best_window": false
+                    }
+                ],
+                "best_window": "6 AM – 7 AM only"
+            },
+            "nearby": [
+                {
+                    "type": "food",
+                    "emoji": "🍽️",
+                    "name": "Hotel Dadar Kamat",
+                    "distance_label": "0.3 km"
+                },
+                {
+                    "type": "food",
+                    "emoji": "🍛",
+                    "name": "Prakash Restaurant",
+                    "distance_label": "0.5 km"
+                },
+                {
+                    "type": "hotel",
+                    "emoji": "🏨",
+                    "name": "Hotel Sagar",
+                    "distance_label": "1 km"
+                },
+                {
+                    "type": "hotel",
+                    "emoji": "🏨",
+                    "name": "Hotel Midland",
+                    "distance_label": "2 km"
+                }
+            ],
+            "teams": [],
+            "similar": [
+                {
+                    "id": "dagdusheth",
+                    "name": "Dagdusheth Halwai",
+                    "emoji": "🛕",
+                    "category": "temple",
+                    "crowd_level": "med"
+                },
+                {
+                    "id": "kasba",
+                    "name": "Kasba Ganpati",
+                    "emoji": "🙏",
+                    "category": "temple",
+                    "crowd_level": "med"
+                },
+                {
+                    "id": "ashtavinayak",
+                    "name": "Ashtavinayak",
+                    "emoji": "🛕",
+                    "category": "temple",
+                    "crowd_level": "low"
+                }
+            ],
+            "itinerary": "🗓️ <b>Siddhivinayak Visit Plan</b><br><br><b>5:00 AM</b> — Depart Pune (3h drive)<br><b>6:00 AM</b> — Arrive Mumbai. Crowd: 🟢 Low (index 20)<br><b>6:30 AM</b> — Temple darshan (queue: ~20 min at this hour)<br><b>8:00 AM</b> — Breakfast in Dadar<br><b>10:00 AM</b> — Explore Dadar market or beach<br><b>12:00 PM</b> — Depart before peak crowd (92 at 11 AM!)<br><b>3:00 PM</b> — Back in Pune<br><br><i>⚠️ Crowd index hits 90+ by 10 AM. The only good window is 6–7 AM.</i>"
+        }
+    ],
+    "trending": [
+        {
+            "id": "rajmachi",
+            "name": "Rajmachi Trek",
+            "emoji": "🥾",
+            "reason_text": "Searches up 140% this week",
+            "category": "forest",
+            "badge": "🔥 Trending"
+        },
+        {
+            "id": "alibaug",
+            "name": "Alibaug Beach",
+            "emoji": "🏖️",
+            "reason_text": "Hot pick for Feb long weekend",
+            "category": "beach",
+            "badge": "🔥 Trending"
+        },
+        {
+            "id": "tamhini",
+            "name": "Tamhini Falls",
+            "emoji": "💧",
+            "reason_text": "Perfect post-monsoon conditions",
+            "category": "water",
+            "badge": "🔥 Trending"
+        },
+        {
+            "id": "karla",
+            "name": "Karla Caves",
+            "emoji": "🕌",
+            "reason_text": "Trending on Instagram Reels",
+            "category": "cave",
+            "badge": "📸 Viral"
+        }
+    ],
+    "user": {
+        "firstName": "Rohan",
+        "tripCount": 3,
+        "lastVisit": {
+            "placeName": "Rajmachi Trek",
+            "date": "Jan 12"
+        },
+        "interests": [
+            "nature",
+            "trekking",
+            "offbeat spots"
+        ],
+        "history": [
+            {
+                "placeId": "rajmachi",
+                "name": "Rajmachi Trek",
+                "emoji": "🥾",
+                "category": "forest",
+                "lastVisited": "Jan 12",
+                "current_crowd_label": "Low crowd this weekend",
+                "current_crowd_color": "low"
+            },
+            {
+                "placeId": "alibaug",
+                "name": "Alibaug Beach",
+                "emoji": "🏖️",
+                "category": "beach",
+                "lastVisited": "Dec 24",
+                "current_crowd_label": "Low crowd this Sunday",
+                "current_crowd_color": "low"
+            },
+            {
+                "placeId": "tamhini",
+                "name": "Tamhini Falls",
+                "emoji": "💧",
+                "category": "water",
+                "lastVisited": "Nov 5",
+                "current_crowd_label": "Moderate crowd Sat",
+                "current_crowd_color": "med"
+            }
+        ],
+        "recommendations": [
+            {
+                "id": "harishchandragad",
+                "name": "Harishchandragad",
+                "emoji": "🌄",
+                "bg": "mtn",
+                "category": "Trekking",
+                "tags": [
+                    "Trekking",
+                    "Nature"
+                ],
+                "crowd_level": "low",
+                "experience_score": 93,
+                "distance_km": 130,
+                "drive_time": "2.5h",
+                "price_label": "₹800"
+            },
+            {
+                "id": "kalsubai",
+                "name": "Kalsubai Peak",
+                "emoji": "⛰️",
+                "bg": "forest",
+                "category": "Trekking",
+                "tags": [
+                    "Trekking",
+                    "Nature"
+                ],
+                "crowd_level": "low",
+                "experience_score": 89,
+                "distance_km": 165,
+                "drive_time": "3h",
+                "price_label": "Free"
+            },
+            {
+                "id": "bhimashankar",
+                "name": "Bhimashankar",
+                "emoji": "🌊",
+                "bg": "water",
+                "category": "Trekking",
+                "tags": [
+                    "Trekking",
+                    "Nature"
+                ],
+                "crowd_level": "low",
+                "experience_score": 86,
+                "distance_km": 110,
+                "drive_time": "2h",
+                "price_label": "₹50"
+            }
+        ],
+        "similarUsers": [
+            {
+                "placeId": "alibaug",
+                "name": "Alibaug",
+                "emoji": "🏖️"
+            },
+            {
+                "placeId": "sinhagad",
+                "name": "Sinhagad",
+                "emoji": "🏰"
+            },
+            {
+                "placeId": "karla",
+                "name": "Karla Caves",
+                "emoji": "🕌"
+            },
+            {
+                "placeId": "rajmachi",
+                "name": "Dudhiware",
+                "emoji": "🌄"
+            }
+        ]
+    },
+    "location": {
+        "city": "Pune",
+        "state": "MH"
+    }
+}
