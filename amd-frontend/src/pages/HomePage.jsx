@@ -10,10 +10,11 @@ import PlaceCard from '../components/cards/PlaceCard';
 import TrendingCard from '../components/cards/TrendingCard';
 import VisitAgainCard from '../components/cards/VisitAgainCard';
 import { getPlaces, getTrendingPlaces, getUserProfile, getUserHistory, getRecommendations, getSimilarUserPlaces } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 export default function HomePage() {
     const navigate = useNavigate();
-    const [isReturningUser, setIsReturningUser] = useState(false);
+    const { isAuthenticated } = useAuth();
     const [places, setPlaces] = useState([]);
     const [trending, setTrending] = useState([]);
     const [user, setUser] = useState(null);
@@ -28,26 +29,26 @@ export default function HomePage() {
     }, []);
 
     useEffect(() => {
-        if (isReturningUser) {
-            getUserProfile().then(setUser);
-            getUserHistory().then(setHistory);
-            getRecommendations().then(setRecommendations);
-            getSimilarUserPlaces().then(setSimilarUsers);
+        if (isAuthenticated) {
+            getUserProfile().then(setUser).catch(() => { });
+            getUserHistory().then(setHistory).catch(() => { });
+            getRecommendations().then(setRecommendations).catch(() => { });
+            getSimilarUserPlaces().then(setSimilarUsers).catch(() => { });
         }
-    }, [isReturningUser]);
+    }, [isAuthenticated]);
 
     const handleCategorySelect = (catId) => {
         setActiveCategory(catId);
         navigate(`/list/${catId}`);
     };
 
-    const pageId = isReturningUser ? 'home-returning' : 'home-new';
+    const pageId = isAuthenticated ? 'home-returning' : 'home-new';
 
-    const chatSubtitle = isReturningUser
+    const chatSubtitle = isAuthenticated
         ? `I know you love ${user?.interests?.[0] || 'travel'}. Want to plan something new?`
         : "Tell me where you want to go and I'll build your perfect trip";
 
-    const initialMessages = isReturningUser
+    const initialMessages = isAuthenticated
         ? [
             {
                 type: 'bot',
@@ -63,7 +64,7 @@ export default function HomePage() {
             },
         ];
 
-    const quickReplies = isReturningUser
+    const quickReplies = isAuthenticated
         ? [
             { label: '🥾 Similar to Rajmachi, but new', text: 'Plan a similar trek to Rajmachi but somewhere new this weekend' },
             { label: '👥 Plan for mixed group of 5', text: 'My group of 5 is free Saturday. Mix of beach lovers and trekkers' },
@@ -76,16 +77,13 @@ export default function HomePage() {
 
     return (
         <div className="h-screen flex flex-col overflow-hidden">
-            <Navbar
-                showSignIn={!isReturningUser}
-                onSignIn={() => setIsReturningUser(true)}
-            />
+            <Navbar />
             <div className="flex flex-1 overflow-hidden">
                 {/* Main Content */}
                 <div className="flex-1 overflow-y-auto custom-scrollbar">
                     <div className="max-w-7xl mx-auto px-6 py-8 space-y-10">
                         {/* Returning User Content */}
-                        {isReturningUser && user && (
+                        {isAuthenticated && user && (
                             <>
                                 <WelcomeBackStrip user={user} />
 
@@ -101,7 +99,7 @@ export default function HomePage() {
 
                                 <SectionHeader
                                     title="Based on Your Trips"
-                                    subtitle={`You love ${user.interests.join(', ')}`}
+                                    subtitle={`You love ${user.interests?.join(', ') || 'travel'}`}
                                 />
                                 <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-[14px] mb-7">
                                     {recommendations.map((place) => (
@@ -111,7 +109,7 @@ export default function HomePage() {
 
                                 <SectionHeader
                                     title="🧑‍🤝‍🧑 Travellers Like You Also Visited"
-                                    subtitle={`People who love ${user.interests[0]} + ${user.interests[1]} near Pune`}
+                                    subtitle={`People who love ${user.interests?.[0] || 'adventure'} + ${user.interests?.[1] || 'travel'} near Pune`}
                                 />
                                 <div className="flex gap-2.5 overflow-x-auto hide-scrollbar">
                                     {similarUsers.map((item) => (
@@ -129,7 +127,7 @@ export default function HomePage() {
                         )}
 
                         {/* New User Content */}
-                        {!isReturningUser && (
+                        {!isAuthenticated && (
                             <>
                                 <HeroBanner />
 

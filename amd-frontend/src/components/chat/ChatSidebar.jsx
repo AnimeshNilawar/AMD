@@ -14,6 +14,73 @@ function TypingIndicator() {
     );
 }
 
+function ItineraryCard({ data }) {
+    const [expandedDay, setExpandedDay] = useState(0);
+
+    if (!data) return null;
+
+    return (
+        <div className="mt-2 space-y-2">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-forest to-forest-mid rounded-xl px-3.5 py-2.5 text-white">
+                <div className="text-[13px] font-bold">🗓️ {data.destination}</div>
+                <div className="text-[10px] opacity-80">{data.duration} day trip · {data.total_estimated_cost || 'Budget TBD'}</div>
+            </div>
+
+            {/* Day tabs */}
+            <div className="flex gap-1">
+                {data.days?.map((day, i) => (
+                    <button
+                        key={i}
+                        className={`flex-1 py-1.5 rounded-lg text-[10px] font-bold cursor-pointer border-none transition-all font-body ${expandedDay === i
+                            ? 'bg-forest text-white'
+                            : 'bg-sand text-muted hover:bg-border'
+                            }`}
+                        onClick={() => setExpandedDay(i)}
+                    >
+                        Day {day.day}
+                    </button>
+                ))}
+            </div>
+
+            {/* Active day schedule */}
+            {data.days?.[expandedDay] && (
+                <div className="space-y-1.5">
+                    {data.days[expandedDay].schedule?.map((item, i) => (
+                        <div key={i} className="flex gap-2 items-start bg-warm border border-border rounded-lg px-2.5 py-2">
+                            <div className="w-[6px] h-[6px] rounded-full bg-forest mt-1.5 flex-shrink-0"></div>
+                            <div className="text-[11px] leading-snug text-text-primary">
+                                {item.activity}
+                                {item.cost && <span className="text-muted ml-1">· {item.cost}</span>}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {/* Packing list */}
+            {data.packing_list?.length > 0 && (
+                <div className="bg-crowd-low-bg/50 border border-crowd-low/20 rounded-xl px-3 py-2">
+                    <div className="text-[10px] font-bold text-forest uppercase tracking-wider mb-1">🎒 Pack</div>
+                    <div className="text-[10px] text-text-secondary leading-relaxed">
+                        {data.packing_list.join(' · ')}
+                    </div>
+                </div>
+            )}
+
+            {/* Important notes */}
+            {data.important_notes?.length > 0 && (
+                <div className="bg-crowd-med-bg/50 border border-crowd-med/20 rounded-xl px-3 py-2">
+                    <div className="text-[10px] font-bold text-crowd-med uppercase tracking-wider mb-1">⚠️ Tips</div>
+                    {data.important_notes.map((note, i) => (
+                        <div key={i} className="text-[10px] text-text-secondary leading-relaxed">• {note}</div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
 export default function ChatSidebar({ pageId, subtitle, initialMessages = [], quickReplies = [], onQuickReply }) {
     const { getMessages, sendMessage, fillAndSend, isTyping } = useChat();
     const [input, setInput] = useState('');
@@ -122,6 +189,10 @@ export default function ChatSidebar({ pageId, subtitle, initialMessages = [], qu
                                 }`}
                         >
                             {msg.text}
+                            {/* Render itinerary card when backend returns type: "itinerary" */}
+                            {msg.responseType === 'itinerary' && msg.data && (
+                                <ItineraryCard data={msg.data} />
+                            )}
                         </div>
                     </div>
                 ))}

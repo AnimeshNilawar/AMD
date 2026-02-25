@@ -2,8 +2,19 @@
 
 const API_BASE = 'http://localhost:5000';
 
+function getAuthHeaders() {
+    const token = localStorage.getItem('access_token');
+    return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 async function apiFetch(path, options = {}) {
-    const res = await fetch(`${API_BASE}${path}`, options);
+    const res = await fetch(`${API_BASE}${path}`, {
+        ...options,
+        headers: {
+            ...getAuthHeaders(),
+            ...options.headers,
+        },
+    });
     if (!res.ok) {
         throw new Error(`API error: ${res.status} ${res.statusText}`);
     }

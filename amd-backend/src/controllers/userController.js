@@ -1,8 +1,24 @@
 // User controller with mock data
 const getUserProfile = (req, res) => {
     try {
+        // Get authenticated user from request (attached by authMiddleware)
+        const authenticatedUser = req.user;
+
+        if (!authenticatedUser) {
+            return res.status(401).json({
+                ok: false,
+                error: "User not authenticated"
+            });
+        }
+
         const profile = {
-            firstName: "Rohan",
+            id: authenticatedUser.id,
+            email: authenticatedUser.email,
+            firstName: authenticatedUser.user_metadata?.full_name || "User",
+            phone: authenticatedUser.user_metadata?.phone || "",
+            createdAt: authenticatedUser.created_at,
+            lastSignInAt: authenticatedUser.last_sign_in_at,
+            // Mock data - replace with actual database queries
             tripCount: 3,
             lastVisit: {
                 placeName: "Rajmachi Trek",
@@ -11,9 +27,13 @@ const getUserProfile = (req, res) => {
             interests: ["nature", "trekking", "offbeat spots"]
         };
 
-        return res.json(profile);
+        return res.json({
+            ok: true,
+            user: profile
+        });
     } catch (err) {
         return res.status(500).json({
+            ok: false,
             error: "PROFILE_FETCH_ERROR",
             message: err.message
         });

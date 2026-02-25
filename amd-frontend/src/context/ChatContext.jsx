@@ -50,6 +50,8 @@ export function ChatProvider({ children }) {
                 type: 'bot',
                 text: response.reply,
                 suggestions: response.suggestions,
+                responseType: response.type || null,
+                data: response.data || null,
             });
         } catch {
             setIsTyping(false);
