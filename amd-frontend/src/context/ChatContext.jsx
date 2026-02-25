@@ -5,6 +5,7 @@ const ChatContext = createContext();
 
 export function ChatProvider({ children }) {
     const [messagesByPage, setMessagesByPage] = useState({});
+    const [sessionByPage, setSessionByPage] = useState({});
     const [isTyping, setIsTyping] = useState(false);
     const inputRef = useRef(null);
 
@@ -29,8 +30,22 @@ export function ChatProvider({ children }) {
         setIsTyping(true);
 
         try {
-            const response = await apiSendChat({ message: text.trim() });
+            // Send message with sessionId (if we have one for this page)
+            const response = await apiSendChat({
+                message: text.trim(),
+                sessionId: sessionByPage[pageId] || null,
+            });
+
             setIsTyping(false);
+
+            // Store the sessionId returned by the backend
+            if (response.sessionId) {
+                setSessionByPage(prev => ({
+                    ...prev,
+                    [pageId]: response.sessionId,
+                }));
+            }
+
             addMessage(pageId, {
                 type: 'bot',
                 text: response.reply,
@@ -43,17 +58,32 @@ export function ChatProvider({ children }) {
                 text: "Something went wrong. Please try again.",
             });
         }
-    }, [addMessage]);
+    }, [addMessage, sessionByPage]);
 
     const fillAndSend = useCallback((pageId, text) => {
         sendMessage(pageId, text);
     }, [sendMessage]);
+
+    // Clear chat history and sessionId for a page (starts a fresh conversation)
+    const clearChat = useCallback((pageId) => {
+        setMessagesByPage(prev => {
+            const next = { ...prev };
+            delete next[pageId];
+            return next;
+        });
+        setSessionByPage(prev => {
+            const next = { ...prev };
+            delete next[pageId];
+            return next;
+        });
+    }, []);
 
     return (
         <ChatContext.Provider value={{
             getMessages,
             sendMessage,
             fillAndSend,
+            clearChat,
             isTyping,
             inputRef,
         }}>

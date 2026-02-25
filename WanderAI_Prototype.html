@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WanderAI — Smart Travel CoPilot</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:#FAF7F2;--sand:#F0EAE0;--warm:#FFFCF8;
+  --forest:#1A3A2A;--fmid:#2D5A3D;--flight:#3D7A52;
+  --terra:#C4622D;--gold:#C9913A;--goldl:#F0C97A;
+  --muted:#7A7060;--text:#1C1A17;--texts:#4A4640;
+  --border:#E0D8CC;
+  --clow:#2D7A4A;--clowbg:#E8F5EC;
+  --cmed:#A06010;--cmedbg:#FEF3E2;
+  --chi:#B0302A;--chibg:#FDECEC;
+  --sh:0 2px 8px rgba(26,22,16,.08);
+  --shm:0 4px 20px rgba(26,22,16,.12);
+  --r:16px;--rs:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;overflow-x:hidden}
+.page{display:none;min-height:100vh;flex-direction:column}
+.page.active{display:flex}
+/* NAVBAR */
+.nav{background:var(--warm);border-bottom:1px solid var(--border);padding:0 28px;height:60px;display:flex;align-items:center;gap:18px;position:sticky;top:0;z-index:100;flex-shrink:0}
+.logo{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:var(--forest);cursor:pointer;white-space:nowrap}
+.logo span{color:var(--terra)}
+.nsearch{flex:1;max-width:380px;display:flex;align-items:center;gap:8px;background:var(--sand);border:1.5px solid var(--border);border-radius:100px;padding:8px 16px;font-size:13px;color:var(--muted)}
+.nloc{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--forest);background:var(--clowbg);padding:6px 13px;border-radius:100px;cursor:pointer;white-space:nowrap}
+.nacts{display:flex;gap:8px;margin-left:auto}
+.nbtn{padding:7px 16px;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:'Outfit',sans-serif;transition:all .2s}
+.nbtn.p{background:var(--forest);color:white}.nbtn.p:hover{background:var(--fmid)}
+.nbtn.g{background:transparent;color:var(--texts);border:1.5px solid var(--border)}.nbtn.g:hover{border-color:var(--forest);color:var(--forest)}
+/* LAYOUT */
+.layout{display:flex;flex:1;overflow:hidden;max-height:calc(100vh - 60px)}
+.main{flex:1;overflow-y:auto;padding:28px 24px 28px 28px}
+.main::-webkit-scrollbar{width:4px}.main::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+/* SIDEBAR */
+.sidebar{width:300px;flex-shrink:0;border-left:1px solid var(--border);background:var(--warm);display:flex;flex-direction:column;overflow:hidden}
+.sh{padding:16px 18px 12px;border-bottom:1px solid var(--border)}
+.sh-top{display:flex;align-items:center;gap:9px;margin-bottom:3px}
+.sh-av{width:30px;height:30px;background:linear-gradient(135deg,var(--forest),var(--flight));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.sh-name{font-size:13px;font-weight:600}
+.sh-status{font-size:11px;color:var(--clow);font-weight:500;display:flex;align-items:center;gap:4px}
+.sh-status::before{content:'';width:5px;height:5px;background:var(--clow);border-radius:50%}
+.sh-sub{font-size:11px;color:var(--muted)}
+.msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.msgs::-webkit-scrollbar{width:3px}.msgs::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.msg{max-width:100%;animation:mi .25s ease}
+@keyframes mi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.mb{padding:9px 13px;border-radius:12px;font-size:12px;line-height:1.5}
+.msg.bot .mb{background:var(--sand);color:var(--text);border-bottom-left-radius:4px}
+.msg.user{display:flex;justify-content:flex-end}
+.msg.user .mb{background:var(--forest);color:white;border-bottom-right-radius:4px;max-width:90%}
+.mlabel{font-size:10px;color:var(--muted);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.csug{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.csbtn{padding:8px 11px;background:var(--warm);border:1.5px solid var(--border);border-radius:7px;font-size:11px;font-weight:500;color:var(--forest);cursor:pointer;text-align:left;transition:all .2s;font-family:'Outfit',sans-serif}
+.csbtn:hover{border-color:var(--forest);background:var(--clowbg)}
+.sinp{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:7px}
+.ci{flex:1;border:1.5px solid var(--border);background:var(--sand);border-radius:100px;padding:8px 14px;font-size:12px;font-family:'Outfit',sans-serif;color:var(--text);outline:none;transition:border-color .2s}
+.ci:focus{border-color:var(--forest)}
+.ci::placeholder{color:var(--muted)}
+.cs{width:35px;height:35px;background:var(--forest);border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:background .2s;flex-shrink:0;color:white}
+.cs:hover{background:var(--fmid)}
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--forest) 0%,var(--fmid) 60%,#2a4a38 100%);border-radius:var(--r);padding:32px 36px;margin-bottom:28px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(255,255,255,.06) 0%,transparent 70%);border-radius:50%}
+.hg{font-size:12px;color:rgba(255,255,255,.6);margin-bottom:5px}
+.ht{font-family:'Playfair Display',serif;font-size:27px;color:white;font-weight:700;line-height:1.2;margin-bottom:7px}
+.ht span{color:var(--goldl)}
+.hs{font-size:13px;color:rgba(255,255,255,.65);margin-bottom:20px}
+.hbtns{display:flex;gap:9px;flex-wrap:wrap}
+.hbtn{padding:9px 16px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:100px;color:white;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif}
+.hbtn:hover{background:rgba(255,255,255,.22)}
+.hbtn.tc{background:var(--terra);border-color:var(--terra)}
+/* SECTION */
+.sh2{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
+.stitle{font-family:'Playfair Display',serif;font-size:19px;font-weight:600}
+.ssub{font-size:12px;color:var(--muted);margin-top:2px}
+.sall{font-size:12px;font-weight:500;color:var(--flight);cursor:pointer}
+/* CATS */
+.cats{display:flex;gap:9px;margin-bottom:28px;overflow-x:auto;padding-bottom:4px}
+.cats::-webkit-scrollbar{height:0}
+.cat{display:flex;flex-direction:column;align-items:center;gap:7px;padding:14px 18px;background:var(--warm);border:1.5px solid var(--border);border-radius:var(--r);cursor:pointer;transition:all .22s;flex-shrink:0;min-width:80px}
+.cat:hover{border-color:var(--forest);background:var(--clowbg);transform:translateY(-2px);box-shadow:var(--sh)}
+.cat.active{border-color:var(--forest);background:var(--forest);transform:translateY(-2px);box-shadow:var(--shm)}
+.cat.active .clbl{color:white}
+.ci2{font-size:24px}.clbl{font-size:11px;font-weight:500;white-space:nowrap}
+/* CARDS */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:28px}
+.card{background:var(--warm);border-radius:var(--r);overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:all .22s;box-shadow:var(--sh)}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shm);border-color:var(--flight)}
+.cimg{height:130px;position:relative;display:flex;align-items:flex-end;padding:9px;overflow:hidden}
+.cemoji{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:48px}
+.beach{background:linear-gradient(160deg,#0c4a6e,#0891b2,#67e8f9)}
+.forest{background:linear-gradient(160deg,#14532d,#16a34a,#86efac)}
+.temple{background:linear-gradient(160deg,#451a03,#b45309,#fbbf24)}
+.mtn{background:linear-gradient(160deg,#1e3a5f,#334155,#94a3b8)}
+.water{background:linear-gradient(160deg,#134e4a,#0d9488,#5eead4)}
+.cave{background:linear-gradient(160deg,#1e1b4b,#4338ca,#a5b4fc)}
+.cbadge{position:absolute;top:9px;right:9px;padding:3px 9px;border-radius:100px;font-size:9px;font-weight:700;letter-spacing:.05em;font-family:'JetBrains Mono',monospace;backdrop-filter:blur(8px);z-index:2}
+.cbadge.low{background:rgba(255,255,255,.9);color:var(--clow)}
+.cbadge.med{background:rgba(255,255,255,.9);color:var(--cmed)}
+.cbadge.high{background:rgba(255,255,255,.9);color:var(--chi)}
+.tbadge{position:absolute;top:9px;left:9px;padding:3px 9px;border-radius:100px;font-size:9px;font-weight:700;background:rgba(196,98,45,.9);color:white;z-index:2}
+.cinfo{padding:12px}
+.cname{font-size:13px;font-weight:600;margin-bottom:3px}
+.cmeta{font-size:10px;color:var(--muted);margin-bottom:7px;display:flex;align-items:center;gap:5px}
+.mdot{width:3px;height:3px;background:var(--border);border-radius:50%}
+.cfoot{display:flex;align-items:center;justify-content:space-between}
+.escore{font-size:11px;font-weight:600;color:var(--gold)}
+.cprice{font-size:10px;color:var(--muted);font-weight:500}
+/* TRENDING ROW */
+.trow{display:flex;gap:11px;overflow-x:auto;padding-bottom:4px;margin-bottom:28px}
+.trow::-webkit-scrollbar{height:0}
+.tcard{min-width:185px;background:var(--warm);border-radius:var(--r);border:1px solid var(--border);overflow:hidden;cursor:pointer;flex-shrink:0;transition:all .22s}
+.tcard:hover{transform:translateY(-3px);box-shadow:var(--shm)}
+.timg{height:90px;position:relative;display:flex;align-items:center;justify-content:center;font-size:32px}
+.tinfo{padding:9px 11px}
+.tname{font-size:12px;font-weight:600;margin-bottom:2px}
+.thot{font-size:10px;color:var(--terra);font-weight:600}
+/* RETURNING */
+.rstrip{background:linear-gradient(90deg,var(--clowbg),#f8fef9);border:1px solid rgba(45,122,74,.2);border-radius:var(--r);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.rmsg{font-size:13px;color:var(--forest);font-weight:500}
+.rsub{font-size:11px;color:var(--muted);margin-top:2px}
+.rav{width:38px;height:38px;background:var(--forest);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:16px;font-weight:700;font-family:'Playfair Display',serif}
+.varow{display:flex;gap:11px;overflow-x:auto;padding-bottom:4px;margin-bottom:28px}
+.varow::-webkit-scrollbar{height:0}
+.vacard{min-width:165px;background:var(--warm);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;flex-shrink:0;transition:all .2s}
+.vacard:hover{transform:translateY(-3px);box-shadow:var(--shm)}
+.vaimg{height:82px;display:flex;align-items:center;justify-content:center;font-size:32px}
+.vai{padding:9px 11px}
+.van{font-size:12px;font-weight:600;margin-bottom:2px}
+.vaw{font-size:10px;color:var(--muted);margin-bottom:3px}
+.vac{font-size:10px;font-weight:600;color:var(--clow)}
+/* LIST PAGE */
+.lhdr{margin-bottom:18px}
+.ltr{display:flex;align-items:center;gap:11px;margin-bottom:10px}
+.lback{padding:6px 13px;background:var(--warm);border:1.5px solid var(--border);border-radius:100px;font-size:12px;cursor:pointer;color:var(--texts);font-family:'Outfit',sans-serif;transition:all .2s}
+.lback:hover{border-color:var(--forest);color:var(--forest)}
+.ltitle{font-family:'Playfair Display',serif;font-size:20px;font-weight:600}
+.sorts{display:flex;gap:7px}
+.sbtn{padding:5px 12px;border-radius:100px;font-size:11px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:var(--warm);color:var(--texts);font-family:'Outfit',sans-serif;transition:all .2s}
+.sbtn.active{background:var(--forest);border-color:var(--forest);color:white}
+.sbtn:hover:not(.active){border-color:var(--forest);color:var(--forest)}
+/* DETAIL */
+.dhero{height:240px;border-radius:var(--r);position:relative;display:flex;align-items:flex-end;padding:22px;overflow:hidden;margin-bottom:22px;font-size:72px}
+.dho{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,rgba(0,0,0,0) 50%)}
+.dhc{position:relative;z-index:2}
+.dback{position:absolute;top:18px;left:18px;z-index:2;background:rgba(255,255,255,.2);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.3);color:white;padding:6px 13px;border-radius:100px;cursor:pointer;font-size:12px;font-weight:500;font-family:'Outfit',sans-serif;transition:background .2s}
+.dback:hover{background:rgba(255,255,255,.3)}
+.dtags{display:flex;gap:7px;margin-bottom:7px}
+.dtag{background:rgba(255,255,255,.25);color:white;padding:2px 9px;border-radius:100px;font-size:10px;font-weight:500}
+.dname{font-family:'Playfair Display',serif;font-size:26px;color:white;font-weight:700}
+.dmeta{display:flex;gap:5px;color:rgba(255,255,255,.8);font-size:12px;margin-top:3px}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.dcard{background:var(--warm);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.dct{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px}
+.ddesc{font-size:13px;color:var(--texts);line-height:1.7}
+.daitag{display:inline-flex;align-items:center;gap:4px;background:var(--clowbg);color:var(--clow);font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;margin-top:9px}
+.cchart{display:flex;align-items:flex-end;gap:3px;height:72px;margin-bottom:6px}
+.cbw{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;position:relative}
+.cbar{width:100%;border-radius:4px 4px 0 0;position:absolute;bottom:0}
+.cbar.low{background:var(--clow);opacity:.7}
+.cbar.med{background:var(--cmed);opacity:.7}
+.cbar.high{background:var(--chi);opacity:.7}
+.cbar.bw{opacity:1!important;box-shadow:0 0 0 2px var(--forest)}
+.cbl{font-size:8px;color:var(--muted);position:absolute;bottom:-15px;font-family:'JetBrains Mono',monospace}
+.cbest{font-size:11px;color:var(--forest);font-weight:600;margin-top:22px}
+.sbk{display:flex;flex-direction:column;gap:9px}
+.srow{display:flex;align-items:center;gap:9px}
+.slbl{font-size:12px;color:var(--texts);width:115px;flex-shrink:0}
+.strack{flex:1;height:5px;background:var(--sand);border-radius:100px;overflow:hidden}
+.sfill{height:100%;border-radius:100px;transition:width .6s ease}
+.sval{font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;width:28px;text-align:right}
+.ngrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:7px}
+.nitem{background:var(--sand);border-radius:var(--rs);padding:10px;display:flex;gap:9px;align-items:flex-start}
+.nico{font-size:18px;flex-shrink:0}
+.nn{font-size:11px;font-weight:600;margin-bottom:1px}
+.nd{font-size:10px;color:var(--muted)}
+.tpanel{background:linear-gradient(135deg,var(--clowbg),#f0faf4);border:1.5px solid rgba(45,122,74,.2);border-radius:var(--r);padding:18px;margin-bottom:14px}
+.tpt{font-size:13px;font-weight:700;color:var(--forest);margin-bottom:3px}
+.tps{font-size:12px;color:var(--muted);margin-bottom:12px}
+.tgroups{display:flex;flex-direction:column;gap:9px}
+.tgroup{background:white;border-radius:var(--rs);padding:11px 13px;display:flex;align-items:center;justify-content:space-between;border:1px solid var(--border)}
+.tgi{font-size:12px}
+.tgn{font-weight:600;color:var(--text)}
+.tgd{font-size:10px;color:var(--muted);margin-top:2px}
+.jbtn{padding:6px 13px;background:var(--forest);color:white;border-radius:100px;font-size:11px;font-weight:600;cursor:pointer;transition:background .2s;font-family:'Outfit',sans-serif;border:none}
+.jbtn:hover{background:var(--fmid)}
+.simrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:7px}
+.simcard{background:var(--warm);border:1px solid var(--border);border-radius:var(--rs);overflow:hidden;cursor:pointer;transition:all .2s}
+.simcard:hover{transform:translateY(-2px);box-shadow:var(--sh)}
+.simimg{height:62px;display:flex;align-items:center;justify-content:center;font-size:26px}
+.simi{padding:7px 9px}
+.simn{font-size:11px;font-weight:600}
+.simc{font-size:9px;color:var(--clow);font-weight:600}
+.fcard{background:var(--warm);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:14px}
+/* TOAST */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--forest);color:white;padding:11px 22px;border-radius:100px;font-size:13px;font-weight:500;z-index:9999;transition:transform .35s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- HOME NEW -->
+<div class="page active" id="page-home-new">
+  <nav class="nav">
+    <div class="logo">Wander<span>AI</span></div>
+    <div class="nsearch">🔍 Search places, treks, beaches…</div>
+    <div class="nloc" onclick="toast('📍 Location detected: Pune, MH')">📍 Pune, MH ▾</div>
+    <div class="nacts">
+      <button class="nbtn g" onclick="sw('returning')">Sign In</button>
+      <button class="nbtn p" onclick="toast('✨ Starting your trip plan...')">Plan a Trip ✦</button>
+    </div>
+  </nav>
+  <div class="layout">
+    <div class="main">
+      <div class="hero">
+        <div class="hg">👋 Welcome to WanderAI</div>
+        <div class="ht">Discover places that <span>fit your vibe</span></div>
+        <div class="hs">Crowd-aware · Budget-smart · AI-planned. Popular spots near Pune, sorted just for you.</div>
+        <div class="hbtns">
+          <div class="hbtn tc" onclick="tc('Plan a weekend trip for 4 friends, budget ₹3,000 each, love beaches 🏖️')">✦ Plan My Weekend Trip</div>
+          <div class="hbtn" onclick="tc('Show me the least crowded places near Pune this weekend')">🧘 Avoid Crowds</div>
+          <div class="hbtn" onclick="tc('Best treks near Pune for beginners in February?')">🥾 Beginner Treks</div>
+        </div>
+      </div>
+      <div class="sh2"><div><div class="stitle">Explore by Category</div><div class="ssub">Tap a category to browse nearby spots</div></div></div>
+      <div class="cats">
+        <div class="cat active" onclick="gl('All')"><div class="ci2">🗺️</div><div class="clbl">All</div></div>
+        <div class="cat" onclick="gl('Beaches')"><div class="ci2">🏖️</div><div class="clbl">Beaches</div></div>
+        <div class="cat" onclick="gl('Temples')"><div class="ci2">🛕</div><div class="clbl">Temples</div></div>
+        <div class="cat" onclick="gl('Mountains')"><div class="ci2">⛰️</div><div class="clbl">Mountains</div></div>
+        <div class="cat" onclick="gl('Trekking')"><div class="ci2">🥾</div><div class="clbl">Trekking</div></div>
+        <div class="cat" onclick="gl('Waterfalls')"><div class="ci2">💧</div><div class="clbl">Waterfalls</div></div>
+        <div class="cat" onclick="gl('Trending')"><div class="ci2">🔥</div><div class="clbl">Trending</div></div>
+      </div>
+      <div class="sh2"><div><div class="stitle">Popular Near Pune</div><div class="ssub">Sorted by distance · Crowd-indexed</div></div><span class="sall" onclick="gl('All')">See all →</span></div>
+      <div class="grid">
+        <div class="card" onclick="gd('rajmachi')"><div class="cimg forest"><div class="cemoji">🥾</div><div class="cbadge low">● LOW CROWD</div></div><div class="cinfo"><div class="cname">Rajmachi Trek</div><div class="cmeta">60 km <div class="mdot"></div> 1.5h</div><div class="cfoot"><div class="escore">⭐ 91/100</div><div class="cprice">₹500</div></div></div></div>
+        <div class="card" onclick="gd('sinhagad')"><div class="cimg mtn"><div class="cemoji">⛰️</div><div class="cbadge med">● MED CROWD</div></div><div class="cinfo"><div class="cname">Sinhagad Fort</div><div class="cmeta">30 km <div class="mdot"></div> 45 min</div><div class="cfoot"><div class="escore">⭐ 78/100</div><div class="cprice">Free</div></div></div></div>
+        <div class="card" onclick="gd('tamhini')"><div class="cimg water"><div class="cemoji">💧</div><div class="cbadge low">● LOW CROWD</div></div><div class="cinfo"><div class="cname">Tamhini Falls</div><div class="cmeta">55 km <div class="mdot"></div> 1.2h</div><div class="cfoot"><div class="escore">⭐ 84/100</div><div class="cprice">Free</div></div></div></div>
+        <div class="card" onclick="gd('alibaug')"><div class="cimg beach"><div class="cemoji">🏖️</div><div class="cbadge low">● LOW CROWD</div></div><div class="cinfo"><div class="cname">Alibaug Beach</div><div class="cmeta">96 km <div class="mdot"></div> 2h</div><div class="cfoot"><div class="escore">⭐ 87/100</div><div class="cprice">₹1,200</div></div></div></div>
+        <div class="card" onclick="gd('karla')"><div class="cimg cave"><div class="cemoji">🕌</div><div class="cbadge low">● LOW CROWD</div></div><div class="cinfo"><div class="cname">Karla Caves</div><div class="cmeta">60 km <div class="mdot"></div> 1.5h</div><div class="cfoot"><div class="escore">⭐ 82/100</div><div class="cprice">₹150</div></div></div></div>
+        <div class="card" onclick="gd('siddhivinayak')"><div class="cimg temple"><div class="cemoji">🛕</div><div class="cbadge high">● HIGH CROWD</div></div><div class="cinfo"><div class="cname">Siddhivinayak</div><div class="cmeta">150 km <div class="mdot"></div> 3h</div><div class="cfoot"><div class="escore">⭐ 62/100</div><div class="cprice">₹200</div></div></div></div>
+      </div>
+      <div class="sh2"><div><div class="stitle">🔥 Hot Right Now</div><div class="ssub">Places everyone's talking about this week</div></div></div>
+      <div class="trow">
+        <div class="tcard" onclick="gd('rajmachi')"><div class="timg forest"><div class="tbadge">🔥 Trending</div>🥾</div><div class="tinfo"><div class="tname">Rajmachi Trek</div><div class="thot">Searches up 140% this week</div></div></div>
+        <div class="tcard" onclick="gd('alibaug')"><div class="timg beach"><div class="tbadge">🔥 Trending</div>🏖️</div><div class="tinfo"><div class="tname">Alibaug Beach</div><div class="thot">Hot pick for Feb long weekend</div></div></div>
+        <div class="tcard" onclick="gd('tamhini')"><div class="timg water"><div class="tbadge">🔥 Trending</div>💧</div><div class="tinfo"><div class="tname">Tamhini Falls</div><div class="thot">Perfect post-monsoon conditions</div></div></div>
+        <div class="tcard" onclick="gd('karla')"><div class="timg cave"><div class="tbadge">📸 Viral</div>🕌</div><div class="tinfo"><div class="tname">Karla Caves</div><div class="thot">Trending on Instagram Reels</div></div></div>
+      </div>
+    </div>
+    <div class="sidebar">
+      <div class="sh"><div class="sh-top"><div class="sh-av">✦</div><div><div class="sh-name">WanderAI Assistant</div><div class="sh-status">Online · Ready to plan</div></div></div><div class="sh-sub">Tell me where to go — I'll plan the perfect trip</div></div>
+      <div class="msgs" id="m-new">
+        <div class="msg bot"><div class="mlabel">WanderAI ✦</div><div class="mb">Hey! 👋 Tell me your travel style — budget, dates, who's coming, and what you love doing.</div></div>
+        <div class="msg bot"><div class="mb">Try asking me:<div class="csug"><div class="csbtn" onclick="tc('Plan a weekend trip for 4 friends, budget ₹3,000 each, love beaches')">🏖️ Beach weekend for 4 friends</div><div class="csbtn" onclick="tc('Find me the least crowded treks near Pune this Saturday')">🧘 Least crowded treks</div><div class="csbtn" onclick="tc('I have ₹2,000 budget, want to go somewhere solo Sunday')">🎒 Solo trip under ₹2,000</div></div></div></div>
+      </div>
+      <div class="sinp"><input class="ci" id="ci-new" placeholder="Where do you want to go?" onkeydown="ck(event,'new')"><button class="cs" onclick="sc('new')">➤</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- HOME RETURNING -->
+<div class="page" id="page-home-returning">
+  <nav class="nav">
+    <div class="logo" onclick="sw('new')">Wander<span>AI</span></div>
+    <div class="nsearch">🔍 Search places, treks, beaches…</div>
+    <div class="nloc">📍 Pune, MH ▾</div>
+    <div class="nacts"><button class="nbtn g" onclick="sw('new')">← New User View</button><button class="nbtn p">Plan a Trip ✦</button></div>
+  </nav>
+  <div class="layout">
+    <div class="main">
+      <div class="rstrip"><div><div class="rmsg">Welcome back, Rohan! 👋</div><div class="rsub">Based on your past 3 trips · Last visit: Rajmachi Trek (Jan 12)</div></div><div class="rav">R</div></div>
+      <div class="sh2"><div><div class="stitle">🔄 Visit Again</div><div class="ssub">Your past spots have LOW crowd this week — good time to revisit!</div></div></div>
+      <div class="varow">
+        <div class="vacard" onclick="gd('rajmachi')"><div class="vaimg forest">🥾</div><div class="vai"><div class="van">Rajmachi Trek</div><div class="vaw">You visited Jan 12</div><div class="vac">● Low crowd this weekend</div></div></div>
+        <div class="vacard" onclick="gd('alibaug')"><div class="vaimg beach">🏖️</div><div class="vai"><div class="van">Alibaug Beach</div><div class="vaw">You visited Dec 24</div><div class="vac">● Low crowd this Sunday</div></div></div>
+        <div class="vacard" onclick="gd('tamhini')"><div class="vaimg water">💧</div><div class="vai"><div class="van">Tamhini Falls</div><div class="vaw">You visited Nov 5</div><div class="vac" style="color:var(--cmed)">● Moderate crowd Sat</div></div></div>
+      </div>
+      <div class="sh2"><div><div class="stitle">Based on Your Trips</div><div class="ssub">You love nature, trekking & offbeat spots</div></div></div>
+      <div class="grid">
+        <div class="card" onclick="gd('rajmachi')"><div class="cimg mtn"><div class="cemoji">🌄</div><div class="cbadge low">● LOW CROWD</div></div><div class="cinfo"><div class="cname">Harishchandragad</div><div class="cmeta">130 km <div class="mdot"></div> 2.5h</div><div class="cfoot"><div class="escore">⭐ 93/100</div><div class="cprice">₹800</div></div></div></div>
+        <div class="card" onclick="gd('karla')"><div class="cimg forest"><div class="cemoji">⛰️</div><div class="cbadge low">● LOW CROWD</div></div><div class="cinfo"><div class="cname">Kalsubai Peak</div><div class="cmeta">165 km <div class="mdot"></div> 3h</div><div class="cfoot"><div class="escore">⭐ 89/100</div><div class="cprice">Free</div></div></div></div>
+        <div class="card" onclick="gd('tamhini')"><div class="cimg water"><div class="cemoji">🌊</div><div class="cbadge low">● LOW CROWD</div></div><div class="cinfo"><div class="cname">Bhimashankar</div><div class="cmeta">110 km <div class="mdot"></div> 2h</div><div class="cfoot"><div class="escore">⭐ 86/100</div><div class="cprice">₹50</div></div></div></div>
+      </div>
+      <div class="sh2"><div><div class="stitle">🧑‍🤝‍🧑 Travellers Like You Also Visited</div><div class="ssub">People who love trekking + nature near Pune</div></div></div>
+      <div class="cats" style="margin-bottom:0">
+        <div class="cat" onclick="gd('alibaug')"><div class="ci2">🏖️</div><div class="clbl">Alibaug</div></div>
+        <div class="cat" onclick="gd('sinhagad')"><div class="ci2">🏰</div><div class="clbl">Sinhagad</div></div>
+        <div class="cat" onclick="gd('karla')"><div class="ci2">🕌</div><div class="clbl">Karla Caves</div></div>
+        <div class="cat" onclick="gd('rajmachi')"><div class="ci2">🌄</div><div class="clbl">Dudhiware</div></div>
+      </div>
+    </div>
+    <div class="sidebar">
+      <div class="sh"><div class="sh-top"><div class="sh-av">✦</div><div><div class="sh-name">WanderAI Assistant</div><div class="sh-status">Online · Knows your preferences</div></div></div><div class="sh-sub">I know you love trekking + nature. Plan something new?</div></div>
+      <div class="msgs" id="m-returning">
+        <div class="msg bot"><div class="mlabel">WanderAI ✦</div><div class="mb">Hey Rohan! 👋 Based on your Rajmachi trip, you might love Harishchandragad — 93/100 score and LOW crowd this weekend!</div></div>
+        <div class="msg bot"><div class="mb"><div class="csug"><div class="csbtn" onclick="tc('Plan a similar trek to Rajmachi but somewhere new this weekend')">🥾 Similar to Rajmachi, but new</div><div class="csbtn" onclick="tc('My group of 5 is free Saturday. Mix of beach lovers and trekkers')">👥 Plan for mixed group of 5</div></div></div></div>
+      </div>
+      <div class="sinp"><input class="ci" id="ci-returning" placeholder="Ask anything..." onkeydown="ck(event,'returning')"><button class="cs" onclick="sc('returning')">➤</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- LIST PAGE -->
+<div class="page" id="page-list">
+  <nav class="nav">
+    <div class="logo" onclick="gh()">Wander<span>AI</span></div>
+    <div class="nsearch">🔍 Search places…</div>
+    <div class="nloc">📍 Pune, MH ▾</div>
+    <div class="nacts"><button class="nbtn p">Plan a Trip ✦</button></div>
+  </nav>
+  <div class="layout">
+    <div class="main">
+      <div class="lhdr">
+        <div class="ltr"><button class="lback" onclick="gh()">← Back</button><div class="ltitle" id="list-title">All Places Near Pune</div></div>
+        <div class="sorts">
+          <div class="sbtn active" onclick="ss(this,'distance')">📍 Distance</div>
+          <div class="sbtn" onclick="ss(this,'score')">⭐ Experience Score</div>
+          <div class="sbtn" onclick="ss(this,'crowd')">🧘 Least Crowded</div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card" onclick="gd('rajmachi')"><div class="cimg forest"><div class="cemoji">🥾</div><div class="cbadge low">● LOW CROWD</div></div><div class="cinfo"><div class="cname">Rajmachi Trek</div><div class="cmeta">60 km <div class="mdot"></div> 1.5h</div><div class="cfoot"><div class="escore">⭐ 91/100</div><div class="cprice">₹500</div></div></div></div>
+        <div class="card" onclick="gd('tamhini')"><div class="cimg water"><div class="cemoji">💧</div><div class="cbadge low">● LOW CROWD</div></div><div class="cinfo"><div class="cname">Tamhini Falls</div><div class="cmeta">55 km <div class="mdot"></div> 1.2h</div><div class="cfoot"><div class="escore">⭐ 84/100</div><div class="cprice">Free</div></div></div></div>
+        <div class="card" onclick="gd('karla')"><div class="cimg cave"><div class="cemoji">🕌</div><div class="cbadge low">● LOW CROWD</div></div><div class="cinfo"><div class="cname">Karla Caves</div><div class="cmeta">60 km <div class="mdot"></div> 1.5h</div><div class="cfoot"><div class="escore">⭐ 82/100</div><div class="cprice">₹150</div></div></div></div>
+        <div class="card" onclick="gd('sinhagad')"><div class="cimg mtn"><div class="cemoji">⛰️</div><div class="cbadge med">● MED CROWD</div></div><div class="cinfo"><div class="cname">Sinhagad Fort</div><div class="cmeta">30 km <div class="mdot"></div> 45 min</div><div class="cfoot"><div class="escore">⭐ 78/100</div><div class="cprice">Free</div></div></div></div>
+        <div class="card" onclick="gd('alibaug')"><div class="cimg beach"><div class="cemoji">🏖️</div><div class="cbadge low">● LOW CROWD</div></div><div class="cinfo"><div class="cname">Alibaug Beach</div><div class="cmeta">96 km <div class="mdot"></div> 2h</div><div class="cfoot"><div class="escore">⭐ 87/100</div><div class="cprice">₹1,200</div></div></div></div>
+        <div class="card" onclick="gd('siddhivinayak')"><div class="cimg temple"><div class="cemoji">🛕</div><div class="cbadge high">● HIGH CROWD</div></div><div class="cinfo"><div class="cname">Siddhivinayak</div><div class="cmeta">150 km <div class="mdot"></div> 3h</div><div class="cfoot"><div class="escore">⭐ 62/100</div><div class="cprice">₹200</div></div></div></div>
+      </div>
+    </div>
+    <div class="sidebar">
+      <div class="sh"><div class="sh-top"><div class="sh-av">✦</div><div><div class="sh-name">WanderAI Assistant</div><div class="sh-status">Online</div></div></div></div>
+      <div class="msgs" id="m-list"><div class="msg bot"><div class="mlabel">WanderAI ✦</div><div class="mb">Browsing? Tell me your budget and dates and I'll narrow it down instantly. 🎯</div></div></div>
+      <div class="sinp"><input class="ci" id="ci-list" placeholder="Ask anything..." onkeydown="ck(event,'list')"><button class="cs" onclick="sc('list')">➤</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL PAGE -->
+<div class="page" id="page-detail">
+  <nav class="nav">
+    <div class="logo" onclick="gh()">Wander<span>AI</span></div>
+    <div class="nsearch">🔍 Search places…</div>
+    <div class="nloc">📍 Pune, MH ▾</div>
+    <div class="nacts"><button class="nbtn p" onclick="tc('Plan a full trip to this place with crowd-aware schedule')">Plan This Trip ✦</button></div>
+  </nav>
+  <div class="layout">
+    <div class="main" id="detail-main"></div>
+    <div class="sidebar">
+      <div class="sh"><div class="sh-top"><div class="sh-av">✦</div><div><div class="sh-name">WanderAI Assistant</div><div class="sh-status">Online</div></div></div><div class="sh-sub" id="dsub">Want to plan this trip? Tell me your dates and group size.</div></div>
+      <div class="msgs" id="m-detail">
+        <div class="msg bot"><div class="mlabel">WanderAI ✦</div><div class="mb" id="dmsg">Great pick! Want me to build your full day plan? 🗓️</div></div>
+        <div class="msg bot"><div class="mb"><div class="csug">
+          <div class="csbtn" onclick="showItinerary()">🗓️ Build my full day plan</div>
+          <div class="csbtn" onclick="tc('Find hotels near this location under ₹2,000 per night')">🏨 Find hotels nearby</div>
+          <div class="csbtn" onclick="tc('What food places are closest to here?')">🍜 Best food spots nearby</div>
+        </div></div></div>
+      </div>
+      <div class="msgs" id="m-itin" style="display:none">
+        <div class="msg bot"><div class="mlabel">WanderAI ✦</div><div class="mb" id="itin-msg">Loading your itinerary...</div></div>
+      </div>
+      <div class="sinp"><input class="ci" id="ci-detail" placeholder="Ask about this place..." onkeydown="ck(event,'detail')"><button class="cs" onclick="sc('detail')">➤</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+const P={
+  rajmachi:{name:"Rajmachi Trek",emoji:"🥾",bg:"forest",tags:["Trekking","Nature","Beginner-Friendly"],crowd:"low",score:91,dist:"60 km · 1.5h drive",price:"₹500/person",
+    desc:"Rajmachi is one of the most rewarding weekend treks near Pune — a hidden gem that rewards early risers with sweeping views of the Sahyadri range. Two ancient forts, Shrivardhan and Manaranjan, crown the summit. The forest trail is alive with birdsong and occasional waterfalls, making every step feel earned.",
+    hours:[10,8,12,25,40,55,60,45,35,28,20,15,12,10,8,6],labels:["6A","7A","8A","9A","10A","11A","12P","1P","2P","3P","4P","5P","6P","7P","8P","9P"],
+    bestHours:[1,2],best:"7 AM – 9 AM",sb:{pop:78,wth:92,cwd:12,aff:85},
+    nearby:[{i:"🍽️",n:"Rajmachi Homestay",d:"0.2 km"},{i:"🍵",n:"Village Tea Stall",d:"0.5 km"},{i:"🏡",n:"Aayush Homestay",d:"1 km"},{i:"⛺",n:"Forest Camp",d:"2 km"}],
+    sim:[{n:"Harishchandragad",e:"🌄",c:"mtn",cw:"Low"},{n:"Visapur Fort",e:"🏰",c:"forest",cw:"Low"},{n:"Bhimashankar",e:"🌳",c:"forest",cw:"Low"}],
+    teams:[{n:"Pune Wanderers",d:"5 members · Sat 5:30 AM · 2 spots left"},{n:"Solo Trekkers Club",d:"3 members · Flexible timing · 3 spots left"}],
+    itin:"🗓️ <b>Rajmachi Day Plan</b><br><br><b>6:30 AM</b> — Depart Pune (avoid traffic)<br><b>8:00 AM</b> — Arrive trailhead. Crowd: 🟢 Low (index 12)<br><b>8:15 AM</b> — Start trek (~3h, moderate difficulty)<br><b>11:30 AM</b> — Summit! Pack lunch here 🎒<br><b>1:00 PM</b> — Descend. Crowd rises to 🟡 45<br><b>2:30 PM</b> — Village homestay lunch (₹150)<br><b>4:30 PM</b> — Head back. Arrive Pune 6:30 PM<br><br><i>Why 8 AM? Crowd drops from 55 to 12 — you'll have the summit almost to yourself.</i>"},
+  sinhagad:{name:"Sinhagad Fort",emoji:"⛰️",bg:"mtn",tags:["Fort","History","Trek"],crowd:"med",score:78,dist:"30 km · 45 min",price:"Free entry",
+    desc:"Sinhagad — Lion's Fort — is where Maratha history breathes. This ancient fort at 1,312m played a pivotal role in the 1670 Battle of Sinhagad. The early morning hike is rewarded with hot buttermilk at the summit stalls and sweeping views of Pune below. Sunrise here, when mist rolls through the valley, is unlike anywhere else.",
+    hours:[15,20,35,55,70,80,85,80,72,65,58,50,45,35,25,15],labels:["6A","7A","8A","9A","10A","11A","12P","1P","2P","3P","4P","5P","6P","7P","8P","9P"],
+    bestHours:[0,1],best:"6 AM – 8 AM",sb:{pop:88,wth:75,cwd:55,aff:72},
+    nearby:[{i:"🍽️",n:"Summit Bhakri Stall",d:"On-site"},{i:"🥛",n:"Taak-Kanda (Buttermilk)",d:"On-site"},{i:"🏨",n:"Sinhagad Resort",d:"3 km"},{i:"🏡",n:"Khadakwasla Homestay",d:"5 km"}],
+    sim:[{n:"Rajgad Fort",e:"🏰",c:"mtn",cw:"Low"},{n:"Torna Fort",e:"⛰️",c:"mtn",cw:"Low"},{n:"Lohagad Fort",e:"🏔️",c:"mtn",cw:"Med"}],
+    teams:[{n:"Fort Seekers",d:"6 members · Sat 5 AM · 1 spot left"}],
+    itin:"🗓️ <b>Sinhagad Day Plan</b><br><br><b>5:30 AM</b> — Depart Pune<br><b>6:15 AM</b> — Arrive. Crowd: 🟢 Low (best window)<br><b>6:30 AM</b> — Begin trek up (1h)<br><b>7:30 AM</b> — Summit. Famous buttermilk + pohe breakfast 🥛<br><b>9:00 AM</b> — Explore fort ruins & viewpoints<br><b>10:30 AM</b> — Descend before crowd peaks at 11 AM<br><b>12:00 PM</b> — Back in Pune for lunch<br><br><i>Avoid visiting after 9 AM — crowd index hits 80+ on weekends.</i>"},
+  tamhini:{name:"Tamhini Falls",emoji:"💧",bg:"water",tags:["Waterfall","Nature","Photography"],crowd:"low",score:84,dist:"55 km · 1.2h",price:"Free entry",
+    desc:"Tamhini is not just a waterfall — it's an entire ecosystem experience. Nestled in Tamhini Ghat, the area is draped in dense forest that hums with life. The waterfall cascades in multiple tiers, each offering a different photography angle. The drive through the ghat — winding roads through mist-covered hills — is half the experience.",
+    hours:[5,8,15,30,50,65,70,65,55,45,35,28,20,15,10,8],labels:["6A","7A","8A","9A","10A","11A","12P","1P","2P","3P","4P","5P","6P","7P","8P","9P"],
+    bestHours:[0,1,2],best:"6 AM – 9 AM",sb:{pop:75,wth:88,cwd:30,aff:78},
+    nearby:[{i:"🍽️",n:"Ghat Dhaba",d:"1 km"},{i:"☕",n:"Valley View Café",d:"2 km"},{i:"🏡",n:"Forest Stay",d:"3 km"},{i:"🏨",n:"Nature's Nest",d:"5 km"}],
+    sim:[{n:"Devkund Falls",e:"🌊",c:"water",cw:"Low"},{n:"Kune Falls",e:"💦",c:"water",cw:"Low"},{n:"Lingamala Falls",e:"💧",c:"water",cw:"Low"}],
+    teams:[{n:"Nature Clicks",d:"2 photographers · Early morning shoot · 2 spots"}],
+    itin:"🗓️ <b>Tamhini Falls Day Plan</b><br><br><b>6:00 AM</b> — Depart Pune via Paud Road<br><b>7:15 AM</b> — Arrive. Crowd: 🟢 Very Low (index 8)<br><b>7:30 AM</b> — Explore main falls & photography<br><b>9:00 AM</b> — Trek to upper tier falls<br><b>10:30 AM</b> — Breakfast at Ghat Dhaba<br><b>12:00 PM</b> — Scenic drive back through ghat<br><b>1:30 PM</b> — Back in Pune<br><br><i>Visit before 9 AM — after 10 AM, crowd index jumps from 15 to 65.</i>"},
+  alibaug:{name:"Alibaug Beach",emoji:"🏖️",bg:"beach",tags:["Beach","Coastal","Weekend Getaway"],crowd:"low",score:87,dist:"96 km · 2h drive",price:"₹1,200/person",
+    desc:"Alibaug is the quintessential Konkan escape — warm golden sand, the historic Kolaba Fort rising from the sea, and a gentle pace of life a world away from Pune. Best visited in winter when the sea is calm. Fresh seafood at beachside shacks makes every visit memorable.",
+    hours:[5,5,8,20,45,65,75,70,60,50,45,55,65,70,60,40],labels:["6A","7A","8A","9A","10A","11A","12P","1P","2P","3P","4P","5P","6P","7P","8P","9P"],
+    bestHours:[0,1,2],best:"6 AM – 9 AM (before crowds)",sb:{pop:85,wth:90,cwd:28,aff:80},
+    nearby:[{i:"🍤",n:"Kokan Darbar Seafood",d:"0.3 km"},{i:"🏨",n:"SunSand Resort",d:"0.5 km"},{i:"🍹",n:"Beach Shack Bar",d:"0.2 km"},{i:"🏨",n:"Alibaug Palace Hotel",d:"2 km"}],
+    sim:[{n:"Kashid Beach",e:"🌊",c:"beach",cw:"Low"},{n:"Murud Beach",e:"🏖️",c:"beach",cw:"Low"},{n:"Diveagar",e:"🐚",c:"beach",cw:"Low"}],
+    teams:[{n:"Beach Lovers Pune",d:"4 members · Leaving Fri night · 3 spots left"}],
+    itin:"🗓️ <b>Alibaug Weekend Plan</b><br><br><b>Fri 9 PM</b> — Depart Pune (avoid Sat morning traffic)<br><b>Fri 11 PM</b> — Check in. Early sleep 🌙<br><b>Sat 6:30 AM</b> — Morning beach walk. Crowd: 🟢 Very Low<br><b>8:00 AM</b> — Breakfast at beach shack<br><b>10:00 AM</b> — Kolaba Fort visit (boat ride, ₹50)<br><b>1:00 PM</b> — Seafood lunch at Kokan Darbar<br><b>3:00 PM</b> — Beach time. Crowd peaks 🟡 70 — okay to enjoy<br><b>Sun 10:00 AM</b> — Depart before traffic builds<br><br><i>Total: ~₹2,800/person for 2 days including stay, food, transport.</i>"},
+  karla:{name:"Karla Caves",emoji:"🕌",bg:"cave",tags:["Heritage","Caves","Photography"],crowd:"low",score:82,dist:"60 km · 1.5h",price:"₹150 entry",
+    desc:"Karla Caves are among India's finest ancient rock-cut Buddhist shrines, dating to the 2nd century BCE. The grand Chaitya hall with its towering ribbed ceiling creates profound stillness. The site receives far less footfall than it deserves — perfect for heritage without the hustle.",
+    hours:[5,8,12,20,30,40,45,40,35,28,22,18,14,10,8,6],labels:["6A","7A","8A","9A","10A","11A","12P","1P","2P","3P","4P","5P","6P","7P","8P","9P"],
+    bestHours:[0,1,2,3],best:"8 AM – 11 AM",sb:{pop:65,wth:80,cwd:15,aff:88},
+    nearby:[{i:"🍽️",n:"Karla Village Dhaba",d:"0.5 km"},{i:"🏨",n:"Lonavala Hotels",d:"12 km"},{i:"☕",n:"Tiger Point Café",d:"8 km"},{i:"🛒",n:"Chikki Shops",d:"10 km"}],
+    sim:[{n:"Bhaja Caves",e:"🏛️",c:"cave",cw:"Low"},{n:"Bedse Caves",e:"🗿",c:"cave",cw:"Low"},{n:"Elephanta Caves",e:"🕌",c:"cave",cw:"Med"}],
+    teams:[{n:"Heritage Explorers",d:"3 members · Sunday 8 AM · 4 spots left"}],
+    itin:"🗓️ <b>Karla Caves Day Plan</b><br><br><b>7:30 AM</b> — Depart Pune via Expressway<br><b>9:00 AM</b> — Arrive Karla. Crowd: 🟢 Very Low (index 12)<br><b>9:15 AM</b> — Explore main Chaitya hall (1.5h)<br><b>10:45 AM</b> — Ekvira Devi Temple visit<br><b>12:00 PM</b> — Lunch at Village Dhaba<br><b>1:30 PM</b> — Drive to Bhaja Caves (12 km, similar caves, even fewer visitors)<br><b>3:30 PM</b> — Head back to Pune<br><br><i>Combine with Bhaja Caves for a full heritage day. Total cost: ₹400–₹500.</i>"},
+  siddhivinayak:{name:"Siddhivinayak Temple",emoji:"🛕",bg:"temple",tags:["Temple","Spiritual","Heritage"],crowd:"high",score:62,dist:"150 km · 3h drive",price:"₹200/person",
+    desc:"Siddhivinayak is one of Maharashtra's most revered Ganesh temples — a spiritual landmark drawing devotees for centuries. The golden dome gleams under the Mumbai sky. For a peaceful visit, avoid weekends. Tuesday mornings see the highest footfall. Plan accordingly.",
+    hours:[20,40,65,85,90,92,88,85,80,78,75,72,70,75,80,70],labels:["6A","7A","8A","9A","10A","11A","12P","1P","2P","3P","4P","5P","6P","7P","8P","9P"],
+    bestHours:[0],best:"6 AM – 7 AM only",sb:{pop:95,wth:60,cwd:79,aff:65},
+    nearby:[{i:"🍽️",n:"Hotel Dadar Kamat",d:"0.3 km"},{i:"🍛",n:"Prakash Restaurant",d:"0.5 km"},{i:"🏨",n:"Hotel Sagar",d:"1 km"},{i:"🏨",n:"Hotel Midland",d:"2 km"}],
+    sim:[{n:"Dagdusheth Halwai",e:"🛕",c:"temple",cw:"Med"},{n:"Kasba Ganpati",e:"🙏",c:"temple",cw:"Med"},{n:"Ashtavinayak",e:"🛕",c:"temple",cw:"Low"}],
+    teams:[],
+    itin:"🗓️ <b>Siddhivinayak Visit Plan</b><br><br><b>5:00 AM</b> — Depart Pune (3h drive)<br><b>6:00 AM</b> — Arrive Mumbai. Crowd: 🟢 Low (index 20)<br><b>6:30 AM</b> — Temple darshan (queue: ~20 min at this hour)<br><b>8:00 AM</b> — Breakfast in Dadar<br><b>10:00 AM</b> — Explore Dadar market or beach<br><b>12:00 PM</b> — Depart before peak crowd (92 at 11 AM!)<br><b>3:00 PM</b> — Back in Pune<br><br><i>⚠️ Crowd index hits 90+ by 10 AM. The only good window is 6–7 AM.</i>"}
+};
+
+let curView='new';
+
+function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+id).classList.add('active')}
+function sw(v){curView=v;show('home-'+v)}
+function gh(){show('home-'+curView)}
+function gl(cat){document.getElementById('list-title').textContent=(cat==='All'?'All Places Near Pune':cat+' Near Pune');show('list')}
+
+function gd(id){
+  const p=P[id];if(!p)return;
+  const mx=Math.max(...p.hours);
+  const bars=p.hours.map((v,i)=>{
+    const h=Math.round(v/mx*100);
+    let cl=v<35?'low':v<60?'med':'high';
+    const bw=p.bestHours.includes(i)?' bw':'';
+    return `<div class="cbw"><div class="cbar ${cl}${bw}" style="height:${h}%"></div><div class="cbl">${p.labels[i]}</div></div>`;
+  }).join('');
+  const mkbar=(lbl,val,col)=>`<div class="srow"><div class="slbl">${lbl}</div><div class="strack"><div class="sfill" style="width:${val}%;background:${col}"></div></div><div class="sval" style="color:${col}">${val}</div></div>`;
+  const nearby=p.nearby.map(n=>`<div class="nitem"><div class="nico">${n.i}</div><div><div class="nn">${n.n}</div><div class="nd">${n.d}</div></div></div>`).join('');
+  const sim=p.sim.map(s=>`<div class="simcard" onclick="toast('Loading ${s.n}...')"><div class="simimg ${s.c}">${s.e}</div><div class="simi"><div class="simn">${s.n}</div><div class="simc">● ${s.cw} crowd</div></div></div>`).join('');
+  const teams=p.teams.length?p.teams.map(t=>`<div class="tgroup"><div class="tgi"><div class="tgn">${t.n}</div><div class="tgd">${t.d}</div></div><button class="jbtn" onclick="toast('✅ Applied to join ${t.n}!')">Apply</button></div>`).join(''):`<div style="font-size:12px;color:var(--muted);padding:10px 0">No open groups yet. Be the first to create one!</div>`;
+  document.getElementById('detail-main').innerHTML=`
+    <div class="dhero ${p.bg}">
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:72px">${p.emoji}</div>
+      <div class="dho"></div>
+      <button class="dback" onclick="gh()">← Back</button>
+      <div class="cbadge ${p.crowd}" style="position:absolute;top:18px;right:18px">● ${p.crowd.toUpperCase()} CROWD</div>
+      <div class="dhc"><div class="dtags">${p.tags.map(t=>`<div class="dtag">${t}</div>`).join('')}</div><div class="dname">${p.name}</div><div class="dmeta">📍 ${p.dist} &nbsp;·&nbsp; 💰 ${p.price}</div></div>
+    </div>
+    <div class="dgrid">
+      <div class="dcard"><div class="dct">About This Place</div><div class="ddesc">${p.desc}</div><div class="daitag">✦ AI-generated · Verified by our team</div></div>
+      <div class="dcard"><div class="dct">Crowd Timeline · Today</div><div class="cchart">${bars}</div><div class="cbest" style="margin-top:22px">✦ Best visit window: ${p.best}</div></div>
+    </div>
+    <div class="dgrid">
+      <div class="dcard"><div class="dct">Experience Score Breakdown</div><div class="sbk" style="margin-top:7px">
+        ${mkbar('Popularity',p.sb.pop,'#1A3A2A')}
+        ${mkbar('Weather Bonus',p.sb.wth,'#0891b2')}
+        ${mkbar('Crowd Penalty ↓',p.sb.cwd,'#B0302A')}
+        ${mkbar('Your Affinity',p.sb.aff,'#C9913A')}
+      </div></div>
+      <div class="dcard"><div class="dct">Nearby Food & Stay</div><div class="ngrid">${nearby}</div></div>
+    </div>
+    <div class="tpanel"><div class="tpt">👥 Join a Group · Solo Traveller?</div><div class="tps">Connect with travellers heading to ${p.name}</div><div class="tgroups">${teams}</div></div>
+    <div class="fcard"><div class="dct">Similar Spots with Lower Crowd</div><div class="simrow">${sim}</div></div>`;
+  document.getElementById('dsub').textContent=`Planning a trip to ${p.name}? Tell me your dates & group size.`;
+  document.getElementById('dmsg').textContent=`Great choice! ${p.name} is rated ${p.score}/100. Best time: ${p.best}. Want me to build your full day plan? 🗓️`;
+  document.getElementById('itin-msg').innerHTML=p.itin;
+  document.getElementById('m-detail').style.display='flex';
+  document.getElementById('m-itin').style.display='none';
+  show('detail');
+}
+
+function showItinerary(){
+  document.getElementById('m-detail').style.display='none';
+  document.getElementById('m-itin').style.display='flex';
+}
+
+function ss(el,type){
+  document.querySelectorAll('.sbtn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  toast(`Sorted by ${type==='distance'?'📍 Distance':type==='score'?'⭐ Experience Score':'🧘 Least Crowded'}`);
+}
+
+const CR=[
+  {t:'beach',r:"🏖️ For beaches near Pune: Alibaug (96 km, LOW crowd this weekend, ⭐87), Kashid (120 km), or Diveagar (130 km, very offbeat). Budget ₹1,500–₹2,500/person. Want a full plan?"},
+  {t:'trek',r:"🥾 Top treks this weekend: Rajmachi (60 km, LOW crowd, ⭐91), Harishchandragad (130 km, ⭐93), Kalsubai (165 km, ⭐89). All have low crowd. Which one?"},
+  {t:'budget',r:"💰 Under ₹2,000? Tamhini Falls (free) + Karla Caves (₹150) are both incredible — LOW crowd this Sunday. Want a combined itinerary?"},
+  {t:'crowd',r:"🧘 Lowest crowd spots this weekend: Karla Caves (index: 15), Rajmachi Trek (index: 20), Tamhini Falls (index: 30). Best visited before 10 AM."},
+  {t:'group',r:"👥 For groups, Rajmachi Trek is perfect — beginner-friendly, LOW crowd, and open group slots available. How many people?"},
+  {t:'solo',r:"🎒 Solo trip! Karla Caves is perfect — LOW crowd, rich history, 3h experience. Total cost: ₹400. Leaving Sunday morning?"},
+  {t:'plan',r:"🗓️ Tell me: (1) your dates, (2) group size, (3) budget/person, (4) what you love — nature, heritage, beach, or adventure?"},
+  {t:'hotel',r:"🏨 Alibaug: beach resorts ₹2,500–₹4,000/night. Lonavala: ₹1,500–₹3,000/night. Rajmachi: charming homestays ₹800–₹1,200/night with meals. Which area?"},
+  {t:'food',r:"🍜 Top picks: Kokan Darbar (Alibaug) for seafood, Summit Bhakri Stall at Sinhagad for local food, Ghat Dhaba near Tamhini for hot pakoras with valley views. 😋"},
+];
+const DR=["Based on this weekend's crowd data, your best options are Karla Caves or Tamhini Falls — both LOW crowd and under 2h drive.","Rajmachi Trek is ⭐91/100 and LOW crowd — perfect for this weekend. Want me to plan the full day?","For a mix of history + nature, try Sinhagad Fort (morning) + Karla Caves (afternoon). Want a combined itinerary?"];
+let di=0;
+
+function tc(text){const ci=document.getElementById('ci-'+(document.querySelector('.page.active').id.replace('page-','').replace('home-','')));if(ci){ci.value=text;sc(ci.id.replace('ci-',''));}}
+function ck(e,id){if(e.key==='Enter')sc(id)}
+function sc(id){
+  const inp=document.getElementById('ci-'+id);
+  const txt=inp?inp.value.trim():'';if(!txt)return;
+  const msgs=document.getElementById('m-'+id);if(!msgs)return;
+  const um=document.createElement('div');um.className='msg user';um.innerHTML=`<div class="mb">${txt}</div>`;msgs.appendChild(um);
+  if(inp)inp.value='';
+  setTimeout(()=>{
+    const low=txt.toLowerCase();let r=null;
+    for(const cr of CR){if(low.includes(cr.t)){r=cr.r;break;}}
+    if(!r){r=DR[di%DR.length];di++;}
+    const bm=document.createElement('div');bm.className='msg bot';bm.innerHTML=`<div class="mlabel">WanderAI ✦</div><div class="mb">${r}</div>`;
+    msgs.appendChild(bm);msgs.scrollTop=msgs.scrollHeight;
+  },700);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function toast(msg){const t=document.getElementById('toastEl');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800)}
+</script>
+</body>
+</html>
