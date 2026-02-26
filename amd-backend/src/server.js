@@ -7,6 +7,7 @@ const locationRoutes = require("./routes/locationRoutes");
 const placesRoutes = require("./routes/placesRoutes");
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
+const sessionRoutes = require("./routes/sessionRoutes");
 const { supabase } = require("./services/supabaseClient");
 
 const app = express();
@@ -35,6 +36,7 @@ app.use("/api/location", locationRoutes);
 app.use("/api/places", placesRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/sessions", sessionRoutes);
 
 app.get("/health", (req, res) => {
     res.json({ ok: true, message: "Server is up" });

@@ -1,25 +1,50 @@
-// Simple in-memory session store (replace with Redis or DB in production)
-const sessions = {};
+const { supabase } = require("../services/supabaseClient");
 
-function getSession(sessionId) {
-    if (!sessions[sessionId]) {
-        sessions[sessionId] = {
-            stage: "new",
-            intent: null,
-            destination: null,
-            itinerary: null,
-            history: [],          // conversation history [{ role, content }]
-            suggestedPlaces: []   // list of suggested place names
-        };
+// Get or create session
+async function getSession(sessionId, userId) {
+    const { data, error } = await supabase
+        .from("sessions")
+        .select("*")
+        .eq("id", sessionId)
+        .eq("user_id", userId)
+        .single();
+
+    if (error && error.code !== "PGRST116") {
+        throw error;
     }
-    return sessions[sessionId];
+
+    if (!data) {
+        const { data: newSession, error: insertError } = await supabase
+            .from("sessions")
+            .insert({
+                id: sessionId,
+                user_id: userId,
+                history: [],
+                suggested_places: []
+            })
+            .select()
+            .single();
+
+        if (insertError) throw insertError;
+
+        return newSession;
+    }
+
+    return data;
 }
 
-function updateSession(sessionId, data) {
-    sessions[sessionId] = {
-        ...sessions[sessionId],
-        ...data
-    };
+// Update session
+async function updateSession(sessionId, userId, updates) {
+    const { error } = await supabase
+        .from("sessions")
+        .update({
+            ...updates,
+            updated_at: new Date()
+        })
+        .eq("id", sessionId)
+        .eq("user_id", userId);
+
+    if (error) throw error;
 }
 
 module.exports = {

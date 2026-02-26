@@ -1,4 +1,5 @@
 const express = require("express");
+const { authMiddleware } = require("../middleware/authMiddleware");
 const { sendChatMessage, healthCheck } = require("../controllers/chatController");
 
 const router = express.Router();
@@ -12,8 +13,8 @@ router.get("/health", async (req, res) => {
     }
 });
 
-// ONLY public endpoint
-router.post("/", sendChatMessage);
+// Chat endpoint requires authentication
+router.post("/", authMiddleware, sendChatMessage);
 
 module.exports = router;
 

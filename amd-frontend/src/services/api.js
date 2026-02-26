@@ -92,3 +92,23 @@ export async function sendChatMessage({ message, sessionId }) {
 export async function generateItinerary(placeId) {
     return apiFetch(`/api/places/${placeId}/itinerary`);
 }
+
+// ─── Session Management ─────────────────────────────────────
+
+export async function listSessions() {
+    return apiFetch('/api/sessions');
+}
+
+export async function updateSessionTitle(sessionId, title) {
+    return apiFetch(`/api/sessions/${sessionId}/title`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title }),
+    });
+}
+
+export async function deleteSession(sessionId) {
+    return apiFetch(`/api/sessions/${sessionId}`, {
+        method: 'DELETE',
+    });
+}

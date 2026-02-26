@@ -2,7 +2,10 @@ const { v4: uuidv4 } = require("uuid");
 const { getSession, updateSession } = require("../store/sessionStore");
 
 // Your ML backend URL (FastAPI service)
-const ML_BACKEND_URL = process.env.ML_BACKEND_URL || "http://localhost:8000/api/chat";
+const ML_BACKEND_URL =
+    process.env.ML_BACKEND_URL || "http://localhost:8000/api/chat";
+
+const MAX_HISTORY = 20; // prevent unlimited growth
 
 async function sendChatMessage(req, res) {
     try {
@@ -14,23 +17,27 @@ async function sendChatMessage(req, res) {
 
         // Get or create session
         const id = sessionId || uuidv4();
-        const session = getSession(id);
+        const session = await getSession(id, req.user.id);
 
-        // Initialize if missing
+        // Ensure fields exist
         session.history = session.history || [];
-        session.suggestedPlaces = session.suggestedPlaces || [];
+        session.suggested_places = session.suggested_places || [];
 
-        // Append current user message to history
-        session.history.push({ role: "User", content: message });
+        if (!session.title) {
+            await updateSession(id, req.user.id, {
+                title: message.slice(0, 40)
+            });
+            session.title = message.slice(0, 40);
+        }
 
-        // Prepare payload for ML backend
+        // 🔹 Prepare payload WITHOUT modifying history yet
         const payload = {
             message,
             history: session.history,
-            suggested_places: session.suggestedPlaces
+            suggested_places: session.suggested_places
         };
 
-        // Call ML backend
+        // 🔹 Call ML backend
         const mlResponse = await fetch(ML_BACKEND_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -43,20 +50,29 @@ async function sendChatMessage(req, res) {
 
         const data = await mlResponse.json();
 
-        // Append bot reply to session history
-        session.history.push({ role: "Bot", content: data.reply });
+        // 🔹 Only update history AFTER successful ML response
+        session.history.push({ role: "user", content: message });
+        session.history.push({ role: "assistant", content: data.reply });
 
-        // Update suggestedPlaces to avoid repeats
+        // 🔹 Trim history to last N messages
+        if (session.history.length > MAX_HISTORY) {
+            session.history = session.history.slice(-MAX_HISTORY);
+        }
+
+        // 🔹 Prevent duplicate suggested places
         if (data.suggested_place_name) {
-            if (!session.suggestedPlaces.includes(data.suggested_place_name)) {
-                session.suggestedPlaces.push(data.suggested_place_name);
+            if (!session.suggested_places.includes(data.suggested_place_name)) {
+                session.suggested_places.push(data.suggested_place_name);
             }
         }
 
-        // Save updated session data
-        updateSession(id, session);
+        // 🔹 Persist to Supabase
+        await updateSession(id, req.user.id, {
+            history: session.history,
+            suggested_places: session.suggested_places
+        });
 
-        // Send response back to frontend with sessionId for continuity
+        // 🔹 Send response back to frontend
         res.json({
             sessionId: id,
             reply: data.reply,
@@ -68,6 +84,7 @@ async function sendChatMessage(req, res) {
 
     } catch (err) {
         console.error("Error in sendChatMessage:", err);
+
         res.status(500).json({
             error: "CHAT_ERROR",
             message: err.message
@@ -77,7 +94,6 @@ async function sendChatMessage(req, res) {
 
 async function healthCheck(req, res) {
     try {
-        // You can implement this to call your ML backend /health if needed
         res.json({ status: "ok" });
     } catch (err) {
         res.status(503).json({ status: "error", message: err.message });

@@ -2,7 +2,16 @@ const { supabase } = require("../services/supabaseClient");
 
 const authMiddleware = async (req, res, next) => {
     try {
-        const token = req.headers.authorization?.split(" ")[1];
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({
+                ok: false,
+                error: "Invalid authorization header"
+            });
+        }
+
+        const token = authHeader.replace("Bearer ", "");
 
         if (!token) {
             return res.status(401).json({
