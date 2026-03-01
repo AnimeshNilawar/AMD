@@ -26,6 +26,7 @@ class TravelIntent(BaseModel):
     special_requirements: List[str] = Field(default_factory=list, description="Special needs or requirements")
     search_alternatives: bool = Field(False, description="Whether to search for new alternatives")
     confirmation_place: Optional[str] = Field(None, description="Confirmed destination name")
+    destination: Optional[str] = Field(None, description="Specific place/destination if mentioned (e.g. Lonavala, Alibaug)")
     original_query: str = Field(..., description="Original user query")
 
     @model_validator(mode='before')
@@ -118,9 +119,26 @@ Respond with valid JSON only."""
         
         # Add original query
         intent_data["original_query"] = user_query
-        
+
         # Validate and return as Pydantic model
-        return TravelIntent(**intent_data)
+        intent = TravelIntent(**intent_data)
+
+        # Fallback: if extractor didn't pick up a destination, try a simple regex
+        # to capture explicit mentions like 'to lonavala' or 'in lonavala'
+        dest = (getattr(intent, "destination", None) or intent.confirmation_place or "").strip()
+        if not dest:
+            import re
+            m = re.search(r"\b(?:to|in|at)\s+([A-Za-z][\w\-\s]{1,40})", user_query, re.IGNORECASE)
+            if m:
+                cand = m.group(1).strip()
+                cand = re.split(r"\b(for|with|on|during)\b", cand, flags=re.IGNORECASE)[0].strip()
+                dest = cand.title()
+        if dest:
+            intent.destination = dest
+            if not intent.confirmation_place:
+                intent.confirmation_place = dest
+
+        return intent
     
     def _create_prompt(self, user_query: str) -> str:
         """Create few-shot prompt with examples"""

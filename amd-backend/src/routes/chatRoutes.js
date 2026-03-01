@@ -4,30 +4,13 @@ const { sendChatMessage, healthCheck } = require("../controllers/chatController"
 
 const router = express.Router();
 
-router.get("/health", async (req, res) => {
-    try {
-        const isHealthy = await healthCheck();
-        res.json({ status: isHealthy ? "ok" : "unavailable" });
-    } catch (err) {
-        res.status(503).json({ status: "error", message: err.message });
-    }
-});
+// Health check endpoint (public, no auth required)
+router.get("/health", healthCheck);
 
 // Chat endpoint requires authentication
 router.post("/", authMiddleware, sendChatMessage);
 
 module.exports = router;
-
-
-
-
-// const express = require("express");
-// const {
-//     sendChatMessage,
-//     extractIntent,
-//     suggestDestinations,
-//     buildItinerary,
-//     healthCheck
 // } = require("../controllers/chatController");
 
 // const router = express.Router();
