@@ -18,15 +18,7 @@ WanderAI is built for practical travel planning, not just chat replies.
 
 ## 🧱 Architecture
 
-```mermaid
-flowchart LR
-    U[User] --> FE[Frontend\nReact + Vite]
-    FE --> BE[Backend\nExpress API]
-    BE --> SB[(Supabase\nAuth + DB)]
-    BE --> LLM[LLM Service\nFastAPI]
-    LLM --> G[Groq]
-    LLM --> GM[Gemini]
-```
+![WanderAI Architecture](assets/arch.png)
 
 ### Ports (recommended for local dev)
 
